@@ -1,11 +1,12 @@
-cart_public.router = new (Backbone.Router.extend({
+cart_public_app.router = new (Backbone.Router.extend({
 	el : $('.js_cart'),
 	routes: {
-		'' : 'index'
+		'' : 'index',
+		'product_list' : 'product_list'
 	},
 
 	initialize : function() {
-		$('.js_cart_add_product').on('click', this.add_product);
+		this.order_products = new cart_public_app.collections.order_products();
 	},
 
 	start : function() {
@@ -15,25 +16,15 @@ cart_public.router = new (Backbone.Router.extend({
 	index : function() {
 	},
 
+	product_list : function() {
+		_.each($('.js_cart_add_product'), function(el) {
+			new cart_public_app.views.add_product({ el : el });
+		});
+	}
+
 	/*close_index : function() {
 		if (this.month_choose) {
 			this.month_choose.undelegateEvents();
 		}
 	}*/
-
-	add_product : function(e) {
-		e.preventDefault();
-
-		var a = $(e.target);
-
-		$.ajax({
-			url : a.href,
-			dataType : 'JSON',
-			type : 'POST'
-		}).done(function(return_data) {
-
-		}).fail(function() {
-
-		});
-	}
 }))();
