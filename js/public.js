@@ -6,6 +6,8 @@
 //@codekit-prepend "public/collections/order_products.js";
 
 //@codekit-prepend "public/views/add_product.js";
+//@codekit-prepend "public/views/cart.js";
+//@codekit-prepend "public/views/cart_product.js";
 
 //@codekit-prepend "public/router.js";
 
