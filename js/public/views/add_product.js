@@ -18,9 +18,5 @@ cart_public_app.views.add_product = Backbone.View.extend({
 				quantity : quantity
 			}]);
 		}
-
-		cart_public_app.router.order_products.forEach(function(model) {
-			model.save();
-		});
 	}
 });

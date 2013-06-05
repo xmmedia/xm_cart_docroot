@@ -1,10 +1,15 @@
 cart_public_app.models.order_product = Backbone.Model.extend({
-	url : 'save_product',
+	urlRoot : 'save_product',
 
-	initialize : function(attributes) {
-		this.set('id', parseInt(attributes.id, 0));
-		this.set('cart_product_id', parseInt(attributes.cart_product_id, 0));
-		this.set('quantity', parseInt(attributes.quantity, 0));
-		this.set('unit_price', parseFloat(attributes.unit_price));
+	parse: function(resp, options) {
+		_.each([ 'id', 'cart_product_id', 'quantity' ], function(field) {
+			if (resp[field]) {
+				resp[field] = parseInt(resp[field], 0);
+			}
+		});
+
+		resp.unit_price = parseFloat(resp.unit_price);
+
+		return resp;
 	}
 });
