@@ -8,7 +8,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 	},
 
 	render : function() {
-		var template_vars = this.model.attributes;
+		var template_vars = _.clone(this.model.attributes);
 		template_vars.cart_prefix = cart_config.prefix;
 
 		this.$el.html(this.template(template_vars));

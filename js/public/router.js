@@ -6,14 +6,7 @@ cart_public_app.router = new (Backbone.Router.extend({
 	},
 
 	initialize : function() {
-		this.order_products = new cart_public_app.collections.order_products();
-
-		this.order_products.fetch({
-			context : this,
-			success : function() {
-				cart_public_app.router.cart = (new cart_public_app.views.cart({ collection : cart_public_app.router.order_products })).render();
-			}
-		});
+		this.order_products = new cart_public_app.collections.order_products().retrieve();
 	},
 
 	start : function() {
