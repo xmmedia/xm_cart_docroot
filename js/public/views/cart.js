@@ -8,13 +8,14 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	render : function() {
-		var ul = this.template();
+		var ul = $(this.template());
 
 		this.collection.forEach(function(order_product) {
 			ul.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
 		});
 
 		this.$el.append(ul);
+		this.$('.js_loading').remove();
 
 		return this;
 	}
