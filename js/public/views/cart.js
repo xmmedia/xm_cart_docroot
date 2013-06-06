@@ -3,7 +3,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif">'),
 	cart_template : Handlebars.compile('<div class="cart">' +
-		'<table class="cart_product_list js_cart_product_list">' +
+		'<table class="cart_product_list cart_product_list_editable js_cart_product_list">' +
 			'<thead><tr>' +
 				'<th class="col_name">Item</th>' +
 				'<th class="col_quantity">Quantity</th>' +
@@ -13,11 +13,16 @@ cart_public_app.views.cart = Backbone.View.extend({
 			'</tr></thead>' +
 			'<tbody></tbody>' +
 		'</table>' +
-		'<p><a href="/{{cart_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a></p></div>'),
+		'<div class="cart_actions">' +
+			'<div class="cart_actions_left"><a href="/{{cart_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a></div>' +
+			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
+		'</div>' +
+		'</div>'),
 	error_template : Handlebars.compile('<p><em>{{error}}</em></p>'),
 
 	events : {
-		'click .js_cart_empty' : 'cart_empty'
+		'click .js_cart_empty' : 'cart_empty',
+		'click .js_cart_checkout' : 'start_checkout'
 	},
 
 	loading : function() {
@@ -62,6 +67,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 				}, 2000);
 			}
 		});
+	},
+
+	start_checkout : function() {
+		window.location.href = '/' + cart_config.prefix + '/checkout';
 	},
 
 	failed : function() {

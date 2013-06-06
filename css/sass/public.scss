@@ -1,11 +1,15 @@
+@import "compass", "_vars", "_media", "_clearfix";
+
+$side_pad: 0.4em;
+
 .cart {
 	.text_right { text-align: right; }
 	.cart_product_list {
 		width: 100%;
-		th, td { padding: 0.5em 0.4em; border-bottom: 1px solid #c1c1c1; }
+		th, td { padding: 0.5em $side_pad; border-bottom: 1px solid #c1c1c1; }
 		th { text-align: left; }
 		.col_name { width: 60%; }
-		.col_quantity { padding-top: 0.2em; padding-bottom: 0.15em; text-align: center; }
+		.col_quantity { text-align: center; }
 		.col_unit_price, .col_amount { text-align: right; }
 		.col_remove {
 			text-align: center;
@@ -20,5 +24,33 @@
 
 		.cart_order_product_quantity { text-align: center; margin-bottom: 0; }
 		.cart_order_product_update_quantity { font-size: 0.85em; text-decoration: none; }
+	}
+	.cart_product_list_editable .col_quantity { padding-top: 0.2em; padding-bottom: 0.3em; }
+
+	.cart_actions {
+		margin: 1em $side_pad; @extend %clearfix;
+		.cart_actions_left { float: left; }
+		.cart_actions_right { float: right; margin-right: 1em + ($side_pad * 2); /* 1em for X in remove col + it's side padding x 2) */ }
+	}
+
+	.cart_checkout_box {
+		border-bottom: 1px solid #c1c1c1; padding: 1em 0; @extend %clearfix;
+		h2 { margin: 0; }
+		.cart_checkbox_box_actions {
+			margin: 1em $side_pad; @extend %clearfix;
+			.cart_checkbox_box_actions_left { float: left; }
+			.cart_checkbox_box_actions_right { float: right; }
+		}
+
+		.cart_billing_container {
+			@extend %clearfix;
+			.cart_billing_address { float: left; width: 50%; }
+			.cart_credit_card { float: left; width: 50%; }
+		}
+	}
+
+	.cart_field {
+		margin-bottom: 0.5em;
+		label { display: block; margin-left: 0.1em; }
 	}
 }
