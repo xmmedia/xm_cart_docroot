@@ -36,7 +36,9 @@ cart_public_app.views.cart = Backbone.View.extend({
 				table.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
 			});
 
-			table.append(this.options.totals.render().el);
+			// append the total rows
+			// we want the innerHTML because it's going to be inside a <div>
+			table.append(this.options.totals.render().el.innerHTML);
 		} else {
 			this.$el.html('<p><em>Your cart is currently empty.</em></p>');
 		}

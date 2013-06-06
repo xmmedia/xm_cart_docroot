@@ -2,15 +2,16 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 	tagName : 'tr',
 	template : Handlebars.compile(
 		'<td class="col_name">{{name}}</td>' +
-		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="text_center js_cart_order_product_quantity"></td>' +
+		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="cart_order_product_quantity js_cart_order_product_quantity"><br><a href="" class="cart_order_product_update_quantity js_cart_order_product_update_quantity">Update</a></td>' +
 		'<td class="col_unit_price">{{unit_price_formatted}}</td>' +
 		'<td class="col_amount">{{amount_formatted}}</td>' +
-		'<td class="col_remove"><a href="/{{cart_prefix}}/remove_product" class="js_cart_order_product_remove">X</a></td>'
+		'<td class="col_remove"><a href="/{{cart_prefix}}/remove_product" class="js_cart_order_product_remove" title="Remove Item from Cart">X</a></td>'
 	),
 	loading_div_template : Handlebars.compile('<div style="display: inline-block; text-align: center; width: 100%;"><img src="/images/loading.gif"></div>'),
 
 	events : {
 		'change .js_cart_order_product_quantity' : 'quantity_changed',
+		'click .cart_order_product_update_quantity' : 'update_quantity',
 		'click .js_cart_order_product_remove' : 'remove_product'
 	},
 
@@ -23,15 +24,21 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		return this;
 	},
 
-	quantity_changed : function(e) {
-		this.$('.js_cart_order_product_quantity').replaceWith(this.loading_div_template());
+	quantity_changed : function() {
+		this.model.set('quantity', this.$('.js_cart_order_product_quantity').val());
 
-		this.model.set('quantity', $(e.target).val());
+		this.$('.js_cart_order_product_quantity').replaceWith(this.loading_div_template());
 
 		cart_public_app.ajax_action('change_quantity', {
 			cart_order_product_id : this.model.get('id'),
 			quantity : this.model.get('quantity')
 		});
+	},
+
+	update_quantity : function(e) {
+		e.preventDefault();
+
+		this.quantity_changed();
 	},
 
 	remove_product : function(e) {
