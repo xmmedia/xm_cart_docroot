@@ -35,6 +35,8 @@ cart_public_app.views.cart = Backbone.View.extend({
 			this.collection.forEach(function(order_product) {
 				table.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
 			});
+
+			table.append(this.options.totals.render().el);
 		} else {
 			this.$el.html('<p><em>Your cart is currently empty.</em></p>');
 		}

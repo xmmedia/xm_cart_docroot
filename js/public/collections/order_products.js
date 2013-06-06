@@ -17,7 +17,10 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 						collection.add(product, { parse : true });
 					});
 
-					cart_public_app.cart = (new cart_public_app.views.cart({ collection : collection })).render();
+					cart_public_app.order = new cart_public_app.models.order(return_data.order);
+					cart_public_app.totals = new cart_public_app.views.totals({ model : cart_public_app.order });
+
+					cart_public_app.cart = (new cart_public_app.views.cart({ collection : collection, totals : cart_public_app.totals })).render();
 				} else {
 					cart_public_app.cart.failed();
 				}
