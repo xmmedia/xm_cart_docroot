@@ -10,20 +10,12 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 	initialize : function() {
 		this.collection.on('fetch', this.loading, this);
-		this.collection.on('change', this.change, this);
-		this.collection.on('add', this.change, this);
 		this.collection.on('destroy', this.render, this);
 		this.collection.on('reset', this.cart_reset, this);
 	},
 
 	loading : function() {
 		this.$el.html(this.loading_template());
-	},
-
-	change : function(model) {
-		model.save();
-
-		this.render();
 	},
 
 	render : function() {

@@ -5,15 +5,13 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 	retrieve : function() {
 		var collection = this;
 
+		if (cart_public_app.router && cart_public_app.router.cart) {
+			cart_public_app.router.cart.loading();
+		}
+
 		this.fetch({
 			success : function() {
-				// if ( ! cart_public_app.router.cart) {
-					cart_public_app.router.cart = new cart_public_app.views.cart({ collection : collection });
-					cart_public_app.router.cart.render();
-				// } else {
-					// cart_public_app.router.cart.collection.fetch();/*.reset(collection)
-						// .render();*/
-				// }
+				cart_public_app.router.cart = (new cart_public_app.views.cart({ collection : collection })).render();
 			}
 		});
 

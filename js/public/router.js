@@ -21,10 +21,4 @@ cart_public_app.router = new (Backbone.Router.extend({
 			new cart_public_app.views.add_product({ el : el });
 		});
 	}
-
-	/*close_index : function() {
-		if (this.month_choose) {
-			this.month_choose.undelegateEvents();
-		}
-	}*/
 }))();
