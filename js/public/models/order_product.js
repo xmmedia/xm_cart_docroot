@@ -1,6 +1,4 @@
 cart_public_app.models.order_product = Backbone.Model.extend({
-	urlRoot : 'save_product',
-
 	parse: function(resp, options) {
 		// make sure some values are actual ints, not strings
 		_.each([ 'id', 'cart_product_id', 'quantity' ], function(field) {

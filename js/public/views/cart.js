@@ -2,7 +2,18 @@ cart_public_app.views.cart = Backbone.View.extend({
 	el : $('.js_cart'),
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif">'),
-	cart_template : Handlebars.compile('<div class="cart"><ul class="js_cart_product_list"></ul><p><a href="/{{cart_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a></p></div>'),
+	cart_template : Handlebars.compile('<div class="cart">' +
+		'<table class="cart_product_list js_cart_product_list">' +
+			'<thead><tr>' +
+				'<th class="col_name">Item</th>' +
+				'<th class="col_quantity">Quantity</th>' +
+				'<th class="col_unit_price">Unit Price</th>' +
+				'<th class="col_amount">Amount</th>' +
+				'<th class="col_remove"></th>' +
+			'</tr></thead>' +
+			'<tbody></tbody>' +
+		'</table>' +
+		'<p><a href="/{{cart_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a></p></div>'),
 
 	events : {
 		'click .js_cart_empty' : 'cart_empty'
@@ -24,10 +35,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 				cart_prefix : cart_config.prefix
 			}));
 
-			var ul = this.$('.js_cart_product_list');
+			var table = this.$('.js_cart_product_list tbody');
 
 			this.collection.forEach(function(order_product) {
-				ul.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
+				table.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
 			});
 		} else {
 			this.$el.html('<p><em>Your cart is currently empty.</em></p>');
@@ -43,25 +54,20 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	cart_reset : function(collection) {
-		if (collection.size() === 0) {
-			this.loading();
+		this.loading();
 
-			$.ajax({
-				url : '/' + cart_config.prefix + '/cart_empty',
-				dataType : 'JSON',
-				context : this
-			}).done(function() {
-				this.render();
-			}).fail(function() {
-				this.$el.html('<p><em>There was a problem emptying your cart. Please try again later.</em></p>');
+		$.ajax({
+			url : '/' + cart_config.prefix + '/cart_empty',
+			dataType : 'JSON',
+			context : this
+		}).done(function() {
+			cart_public_app.router.order_products.retrieve();
+		}).fail(function() {
+			this.$el.html('<p><em>There was a problem emptying your cart. Please try again later.</em></p>');
 
-				var view = this;
-				setTimeout(function() {
-					view.render();
-				}, 2000);
-			});
-		} else {
-			this.render();
-		}
+			setTimeout(function() {
+				cart_public_app.router.order_products.retrieve();
+			}, 2000);
+		});
 	}
 });

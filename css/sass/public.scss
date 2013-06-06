@@ -1,3 +1,16 @@
 .cart {
 	.text_right { text-align: right; }
+	.text_center { text-align: center; }
+	.cart_product_list {
+		width: 100%;
+		th, td { padding: 0.5em 0.4em; border-bottom: 1px solid #c1c1c1; }
+		th { text-align: left; }
+		.col_name { width: 60%; }
+		.col_quantity { padding-top: 0.2em; padding-bottom: 0.15em; text-align: center; }
+		.col_unit_price, .col_amount { text-align: right; }
+		.col_remove {
+			text-align: center;
+			a { text-decoration: none; font-weight: bold; color: #f00; }
+		}
+	}
 }
