@@ -6,7 +6,7 @@ cart_public_app.router = new (Backbone.Router.extend({
 	},
 
 	initialize : function() {
-		this.order_products = new cart_public_app.collections.order_products().retrieve();
+		cart_public_app.order_products = new cart_public_app.collections.order_products().retrieve();
 	},
 
 	start : function() {

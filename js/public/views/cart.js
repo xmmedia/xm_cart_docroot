@@ -19,12 +19,6 @@ cart_public_app.views.cart = Backbone.View.extend({
 		'click .js_cart_empty' : 'cart_empty'
 	},
 
-	initialize : function() {
-		this.collection.on('fetch', this.loading, this);
-		this.collection.on('destroy', this.render, this);
-		this.collection.on('reset', this.cart_reset, this);
-	},
-
 	loading : function() {
 		this.$el.html(this.loading_template());
 	},
@@ -50,24 +44,18 @@ cart_public_app.views.cart = Backbone.View.extend({
 	cart_empty : function(e) {
 		e.preventDefault();
 
-		this.collection.reset();
-	},
-
-	cart_reset : function(collection) {
 		this.loading();
 
-		$.ajax({
-			url : '/' + cart_config.prefix + '/cart_empty',
-			dataType : 'JSON',
-			context : this
-		}).done(function() {
-			cart_public_app.router.order_products.retrieve();
-		}).fail(function() {
-			this.$el.html('<p><em>There was a problem emptying your cart. Please try again later.</em></p>');
+		cart_public_app.ajax_action('cart_empty', {}, {
+			fail : function(return_data) {
+				cl4.process_ajax(return_data);
 
-			setTimeout(function() {
-				cart_public_app.router.order_products.retrieve();
-			}, 2000);
+				this.$el.html('<p><em>There was a problem emptying your cart. Please try again later.</em></p>');
+
+				setTimeout(function() {
+					cart_public_app.order_products.retrieve();
+				}, 2000);
+			}
 		});
 	}
 });

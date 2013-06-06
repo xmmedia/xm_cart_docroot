@@ -28,29 +28,18 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 
 		this.model.set('quantity', $(e.target).val());
 
-		this.ajax_action('change_quantity');
+		cart_public_app.ajax_action('change_quantity', {
+			cart_order_product_id : this.model.get('id'),
+			quantity : this.model.get('quantity')
+		});
 	},
 
 	remove_product : function(e) {
 		e.preventDefault();
 
-		this.ajax_action('remove_product');
-	},
-
-	ajax_action : function(action) {
-		$.ajax({
-			url : '/' + cart_config.prefix + '/' + action,
-			data : {
-				cart_order_product_id : this.model.get('id'),
-				quantity : this.model.get('quantity')
-			},
-			method : 'POST',
-			dataType : 'JSON',
-			context : this
-		}).done(function() {
-			cart_public_app.router.order_products.retrieve();
-		}).fail(function() {
-			cart_public_app.router.order_products.retrieve();
+		cart_public_app.ajax_action('remove_product', {
+			cart_order_product_id : this.model.get('id'),
+			quantity : this.model.get('quantity')
 		});
 	}
 });

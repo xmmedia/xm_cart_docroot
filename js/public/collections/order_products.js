@@ -5,13 +5,13 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 	retrieve : function() {
 		var collection = this;
 
-		if (cart_public_app.router && cart_public_app.router.cart) {
-			cart_public_app.router.cart.loading();
+		if (cart_public_app.router && cart_public_app.cart) {
+			cart_public_app.cart.loading();
 		}
 
 		this.fetch({
 			success : function() {
-				cart_public_app.router.cart = (new cart_public_app.views.cart({ collection : collection })).render();
+				cart_public_app.cart = (new cart_public_app.views.cart({ collection : collection })).render();
 			}
 		});
 

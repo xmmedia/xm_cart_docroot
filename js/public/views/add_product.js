@@ -6,24 +6,22 @@ cart_public_app.views.add_product = Backbone.View.extend({
 	add_product : function(e) {
 		e.preventDefault();
 
-		cart_public_app.router.cart.loading();
+		cart_public_app.cart.loading();
 		this.$('input[type="submit"]').prop('disabled', true);
 
-		$.ajax({
-			url : '/' + cart_config.prefix + '/add_product',
-			data : {
-				cart_product_id : this.$el.find('.js_cart_product_id').val(),
-				quantity : this.$el.find('.js_cart_order_product_quantity').val()
-			},
-			method : 'POST',
-			dataType : 'JSON',
-			context : this
-		}).done(function() {
-			cart_public_app.router.order_products.retrieve();
-			this.$('input[type="submit"]').prop('disabled', false);
-		}).fail(function() {
-			cart_public_app.router.order_products.retrieve();
-			this.$('input[type="submit"]').prop('disabled', false);
+		cart_public_app.ajax_action('add_product', {
+			cart_product_id : this.$el.find('.js_cart_product_id').val(),
+			quantity : this.$el.find('.js_cart_order_product_quantity').val()
+		}, {
+			context : this,
+			done : this.ajax_promise,
+			fail : this.ajax_promise
 		});
+	},
+
+	ajax_promise : function(return_data) {
+		cl4.process_ajax(return_data);
+		cart_public_app.order_products.retrieve();
+		this.$('input[type="submit"]').prop('disabled', false);
 	}
 });
