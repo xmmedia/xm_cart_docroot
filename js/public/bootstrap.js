@@ -35,3 +35,5 @@ var cart_public_app = {
 		cart_public_app.order_products.retrieve();
 	}
 };
+
+Stripe.setPublishableKey(cart_config.stripe_publishable_key);

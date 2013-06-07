@@ -1,11 +1,13 @@
 cart_public_app.views.checkout = Backbone.View.extend({
 	checkout_box_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error">{{error}}</li></ul>'),
+	checkout_box_payment_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error"><ul class="cl4_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
 
 	events : {
 		'click .js_cart_checkout_continue' : 'next_step',
 		'click .js_cart_checkout_box_edit' : 'edit_step',
 		'click .js_cart_checkout_copy_shipping' : 'copy_shipping',
-		'change .js_cart_checkout_form_billing' : 'billing_changed'
+		'change .js_cart_checkout_form_billing' : 'billing_changed',
+		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type'
 	},
 
 	initialize : function() {
@@ -64,7 +66,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			.data('cart_checkout_step_is_open', 1)
 			.hide().promise().done(function() {
 				step_container.find('.js_cart_checkout_box_open').show();
-				step_container.find('.js_cart_checkout_box_messages').empty();
+				view.clear_messages(step_container);
 				view.scroll_to(step_container);
 			});
 	},
@@ -112,6 +114,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		$('.js_cart_checkout_form_billing .js_cart_same_as_shipping_flag').val(0);
 	},
 
+	display_card_type : function(e) {
+		console.log(Stripe.card.cardType($(e.target).val()));
+	},
+
 	validate_step : function(step_container) {
 		switch (step_container.data('cart_checkout_step_type')) {
 			case 'cart' :
@@ -137,6 +143,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	validate_shipping : function(step_container) {
 		this.add_loading(step_container);
+		this.clear_messages(step_container);
 
 		var verify_error = 'There was a problem verifying your shipping information. Please try again later.';
 
@@ -171,6 +178,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	validate_payment : function(step_container) {
 		this.add_loading(step_container);
+		this.clear_messages(step_container);
 
 		var verify_error = 'There was a problem verifying your billing and payment information. Please try again later.';
 
@@ -180,7 +188,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			success : function(return_data) {
 				if (cl4.process_ajax(return_data)) {
 					// run a second request to valid the payment (credit card) information
-					step_container.find('.js_cart_checkout_form_payment').ajaxForm({
+					/*step_container.find('.js_cart_checkout_form_payment').ajaxForm({
 						dataType : 'JSON',
 						context : this,
 						success : function(return_data) {
@@ -204,7 +212,48 @@ cart_public_app.views.checkout = Backbone.View.extend({
 							this.remove_loading(step_container);
 						}
 					})
-					.submit();
+					.submit();*/
+
+					var payment_form = step_container.find('.js_cart_checkout_form_payment'),
+						credit_card = {
+							number : payment_form.find('.js_cart_checkout_credit_card_number').val(),
+							security_code : payment_form.find('.js_cart_checkout_credit_card_security_code').val(),
+							expiry_month : payment_form.find('.js_cart_checkout_credit_card_expiry_date_month').val(),
+							expiry_year : payment_form.find('.js_cart_checkout_credit_card_expiry_date_year').val()
+						},
+						validation_msgs = [];
+
+					if ( ! Stripe.card.validateCardNumber(credit_card.number)) {
+						validation_msgs.push('Your Credit Card Number does not appear to be valid.');
+					}
+					if ( ! Stripe.card.validateCVC(credit_card.security_code)) {
+						validation_msgs.push('The Security Code does not appear to be valid.');
+					}
+					if ( ! Stripe.card.validateExpiry(credit_card.expiry_month, credit_card.expiry_year)) {
+						validation_msgs.push('The Expiry Date does not appear to be valid. Please confirm that the credit has not already expired.');
+					}
+
+					if (validation_msgs.length > 0) {
+						this.add_messages(step_container, this.checkout_box_payment_error_template({ msgs : validation_msgs }));
+					} else {
+						Stripe.card.createToken({
+							number: credit_card.number,
+							cvc: credit_card.security_code,
+							exp_month: credit_card.expiry_month,
+							exp_year: credit_card.expiry_year,
+							name : return_data.billing_address.first_name + ' ' + return_data.billing_address.last_name,
+							address_line1 : return_data.billing_address.address_1,
+							address_line2 : return_data.billing_address.address_2,
+							address_city : return_data.billing_address.city,
+							address_state : return_data.billing_address.state,
+							address_zip : return_data.billing_address.postal_code,
+							address_country : return_data.billing_address.country
+						}, this.strip_response_handler);
+
+						// .js_cart_checkout_payment_display
+						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
+						this.goto_next_step(step_container);
+					}
 				} else {
 					var message_html;
 					if (return_data.message_html) {
@@ -227,6 +276,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		return false;
 	},
 
+	strip_response_handler : function(status, response) {
+console.log(status);
+console.log(response);
+	},
+
 	validate_confirm : function(step_container) {
 		return true;
 	},
@@ -242,6 +296,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	add_messages : function(step_container, message_html) {
 		step_container.find('.js_cart_checkout_box_messages').html(message_html);
 		this.scroll_to(step_container);
+	},
+
+	clear_messages : function(step_container) {
+		step_container.find('.js_cart_checkout_box_messages').empty();
 	},
 
 	scroll_to : function(element) {
