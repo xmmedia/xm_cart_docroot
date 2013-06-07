@@ -2,15 +2,22 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	checkout_box_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error">{{error}}</li></ul>'),
 
 	events : {
-		'click .js_cart_checkout_continue' : 'next_step'
+		'click .js_cart_checkout_continue' : 'next_step',
+		'click .js_cart_checkout_box_edit' : 'edit_step'
 	},
 
 	initialize : function() {
 		this.steps = this.$('.js_cart_checkout_step');
 
 		_.each(this.steps, function(step) {
-			$(step).data('cart_checkout_complete', 0);
+			var _step = $(step);
+			_step.data('cart_checkout_complete', 0);
+			if (_step.data('cart_checkout_step_type') != 'cart') {
+				_step.data('cart_checkout_step_is_open', 0);
+			}
 		}, this);
+
+		this.current_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="cart"]');
 	},
 
 	next_step : function(e) {
@@ -25,8 +32,9 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	goto_next_step : function(step_container) {
 		var checkout_view = this;
 
-		step_container.find('.js_cart_checkout_box_open').hide()
-			.promise().done(function() {
+		step_container.find('.js_cart_checkout_box_open')
+			.data('cart_checkout_step_is_open', 0)
+			.hide().promise().done(function() {
 				step_container.find('.js_cart_checkout_box_closed').show()
 					.promise().done(function() {
 						step_container.data('cart_checkout_complete', 1);
@@ -49,11 +57,32 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	open_step : function(step_container) {
 		var view = this;
-		step_container.find('.js_cart_checkout_box_closed').hide()
-			.promise().done(function() {
+		this.current_step = step_container;
+		step_container.find('.js_cart_checkout_box_closed')
+			.data('cart_checkout_step_is_open', 1)
+			.hide().promise().done(function() {
 				step_container.find('.js_cart_checkout_box_open').show();
+				step_container.find('.js_cart_checkout_box_messages').empty();
 				view.scroll_to(step_container);
 			});
+	},
+
+	close_step : function(step_container) {
+		step_container.find('.js_cart_checkout_box_open')
+			.data('cart_checkout_step_is_open', 0)
+			.hide().promise().done(function() {
+				step_container.find('.js_cart_checkout_box_closed').show();
+			});
+	},
+
+	edit_step : function(e) {
+		e.preventDefault();
+
+		// var open_step = $('.js_cart_checkout_step[data-cart_checkout_step_is_open=1]');
+		this.close_step(this.current_step);
+
+		var step_container = $(e.target).closest('.js_cart_checkout_step');
+		this.open_step(step_container);
 	},
 
 	validate_step : function(step_container) {
@@ -190,7 +219,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	scroll_to : function(element) {
 		$('html, body').animate({
-			scrollTop: element.offset().top - 10
+			scrollTop: element.offset().top
 		}, 500);
 	}
 });

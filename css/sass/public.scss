@@ -49,6 +49,11 @@ $side_pad: 0.4em;
 		}
 
 		.cart_checkout_box_edit { float: right; }
+
+		.cart_checkout_box_billing {
+			.cart_checkout_box_billing_left { float: left; width: 50%; }
+			.cart_checkout_box_billing_right { float: right; width: 50%; }
+		}
 	}
 
 	.cart_field {
