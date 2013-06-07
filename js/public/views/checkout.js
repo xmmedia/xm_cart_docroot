@@ -2,13 +2,15 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	error_template : Handlebars.compile('<ul class="cl4_message"><li class="error">{{error}}</li></ul>'),
 	payment_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error"><ul class="cl4_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
 	payment_display_template : Handlebars.compile('<p><strong>Payment Method</strong><br>{{card_type}} ...{{last_4}}</p>'),
+	complete_loading_template : Handlebars.compile('<div class="js_loading"><img src="/images/loading.gif"></div>'),
 
 	events : {
 		'click .js_cart_checkout_continue' : 'next_step',
 		'click .js_cart_checkout_box_edit' : 'edit_step',
 		'click .js_cart_checkout_copy_shipping' : 'copy_shipping',
 		'change .js_cart_checkout_form_billing' : 'billing_changed',
-		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type'
+		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type',
+		'click .js_cart_checkout_complete_order_submit' : 'complete_order'
 	},
 
 	stripe_data : {},
@@ -31,6 +33,9 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		var step_container = $(e.target).closest('.js_cart_checkout_step'),
 			allow_continue = this.validate_step(step_container);
 
+		// only allow continue if the validate step returns true right away
+		// in some cases, processing must be done first, so it will return false now
+		// and then go to the next step later
 		if (allow_continue) {
 			this.goto_next_step(step_container);
 		}
@@ -92,6 +97,51 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		this.open_step(step_container);
 	},
 
+	complete_order : function(e) {
+		e.preventDefault();
+
+		var button = $(e.target),
+			step_container = button.closest('.js_cart_checkout_step'),
+			verify_error = 'There was a problem processing your payment. Please contact us before trying again to prevent duplicate payments.';
+// disable other page events (undelegate?)
+		this.clear_messages(step_container);
+		button.after(this.complete_loading_template());
+
+		// put the stripe data in a field so that it gets sent to the server
+		this.$('.js_cart_checkout_stripe_data').val(JSON.stringify(this.stripe_data));
+
+		this.$('.js_cart_checkout_form_complete_order').ajaxForm({
+			dataType : 'JSON',
+			context : this,
+			success : function(return_data) {
+				if (cl4.process_ajax(return_data)) {
+// does this mean it's all good??
+console.log(return_data);
+				} else {
+					if (return_data.redirect) {
+						window.location = return_data.redirect;
+						return;
+					}
+
+					var message_html;
+					if (return_data.message_html) {
+						message_html = return_data.message_html;
+					} else {
+						message_html = this.error_template({ error : verify_error });
+					}
+
+					this.add_messages(step_container, message_html);
+				}
+				this.remove_loading(step_container);
+			},
+			error : function() {
+				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
+				this.remove_loading(step_container);
+			}
+		})
+		.submit();
+	},
+
 	copy_shipping : function(e) {
 		e.preventDefault();
 
@@ -132,8 +182,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			case 'payment' :
 				return this.validate_payment(step_container);
 
-			case 'confirm' :
-				return this.validate_confirm(step_container);
+			case 'final' :
+				return this.validate_final(step_container);
 
 			default :
 				return false;
@@ -158,6 +208,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					step_container.find('.js_cart_checkout_box_result').html(return_data.shipping_display);
 					this.goto_next_step(step_container);
 				} else {
+					if (return_data.redirect) {
+						window.location = return_data.redirect;
+						return;
+					}
+
 					var message_html;
 					if (return_data.message_html) {
 						message_html = return_data.message_html;
@@ -212,6 +267,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 					if (validation_msgs.length > 0) {
 						this.add_messages(step_container, this.payment_error_template({ msgs : validation_msgs }));
+						this.remove_loading(step_container);
 					} else {
 						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
 
@@ -230,6 +286,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 						}, this.strip_response_handler);
 					}
 				} else {
+					if (return_data.redirect) {
+						window.location = return_data.redirect;
+						return;
+					}
+
 					var message_html;
 					if (return_data.message_html) {
 						message_html = return_data.message_html;
@@ -270,8 +331,44 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		}
 	},
 
-	validate_confirm : function(step_container) {
-		return true;
+	validate_final : function(step_container) {
+		this.add_loading(step_container);
+		this.clear_messages(step_container);
+
+		var verify_error = 'There was a problem saving your order. Please try again later.';
+
+		step_container.find('.js_cart_checkout_form_final').ajaxForm({
+			dataType : 'JSON',
+			context : this,
+			success : function(return_data) {
+				if (cl4.process_ajax(return_data)) {
+					step_container.find('.js_cart_checkout_box_result').html(return_data.final_display);
+					this.goto_next_step(step_container);
+				} else {
+					if (return_data.redirect) {
+						window.location = return_data.redirect;
+						return;
+					}
+
+					var message_html;
+					if (return_data.message_html) {
+						message_html = return_data.message_html;
+					} else {
+						message_html = this.error_template({ error : verify_error });
+					}
+
+					this.add_messages(step_container, message_html);
+				}
+				this.remove_loading(step_container);
+			},
+			error : function() {
+				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
+				this.remove_loading(step_container);
+			}
+		})
+		.submit();
+
+		return false;
 	},
 
 	add_loading : function(step_container) {
