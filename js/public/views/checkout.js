@@ -1,6 +1,7 @@
 cart_public_app.views.checkout = Backbone.View.extend({
-	checkout_box_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error">{{error}}</li></ul>'),
-	checkout_box_payment_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error"><ul class="cl4_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
+	error_template : Handlebars.compile('<ul class="cl4_message"><li class="error">{{error}}</li></ul>'),
+	payment_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error"><ul class="cl4_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
+	payment_display_template : Handlebars.compile('<p><strong>Payment Method</strong><br>{{card_type}} ...{{last_4}}</p>'),
 
 	events : {
 		'click .js_cart_checkout_continue' : 'next_step',
@@ -9,6 +10,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		'change .js_cart_checkout_form_billing' : 'billing_changed',
 		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type'
 	},
+
+	stripe_data : {},
 
 	initialize : function() {
 		this.steps = this.$('.js_cart_checkout_step');
@@ -159,7 +162,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					if (return_data.message_html) {
 						message_html = return_data.message_html;
 					} else {
-						message_html = this.checkout_box_error_template({ error : verify_error });
+						message_html = this.error_template({ error : verify_error });
 					}
 
 					this.add_messages(step_container, message_html);
@@ -167,7 +170,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 				this.remove_loading(step_container);
 			},
 			error : function() {
-				step_container.find('.js_cart_checkout_box_messages').html(this.checkout_box_error_template({ error : verify_error }));
+				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
 				this.remove_loading(step_container);
 			}
 		})
@@ -187,33 +190,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			context : this,
 			success : function(return_data) {
 				if (cl4.process_ajax(return_data)) {
-					// run a second request to valid the payment (credit card) information
-					/*step_container.find('.js_cart_checkout_form_payment').ajaxForm({
-						dataType : 'JSON',
-						context : this,
-						success : function(return_data) {
-							if (cl4.process_ajax(return_data)) {
-								step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
-								this.goto_next_step(step_container);
-							} else {
-								var message_html;
-								if (return_data.message_html) {
-									message_html = return_data.message_html;
-								} else {
-									message_html = this.checkout_box_error_template({ error : verify_error });
-								}
-
-								this.add_messages(step_container, message_html);
-							}
-							this.remove_loading(step_container);
-						},
-						error : function() {
-							step_container.find('.js_cart_checkout_box_messages').html(this.checkout_box_error_template({ error : verify_error }));
-							this.remove_loading(step_container);
-						}
-					})
-					.submit();*/
-
+					// validate the payment info and then get the token from Stripe
 					var payment_form = step_container.find('.js_cart_checkout_form_payment'),
 						credit_card = {
 							number : payment_form.find('.js_cart_checkout_credit_card_number').val(),
@@ -234,8 +211,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					}
 
 					if (validation_msgs.length > 0) {
-						this.add_messages(step_container, this.checkout_box_payment_error_template({ msgs : validation_msgs }));
+						this.add_messages(step_container, this.payment_error_template({ msgs : validation_msgs }));
 					} else {
+						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
+
 						Stripe.card.createToken({
 							number: credit_card.number,
 							cvc: credit_card.security_code,
@@ -249,25 +228,20 @@ cart_public_app.views.checkout = Backbone.View.extend({
 							address_zip : return_data.billing_address.postal_code,
 							address_country : return_data.billing_address.country
 						}, this.strip_response_handler);
-
-						// .js_cart_checkout_payment_display
-						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
-						this.goto_next_step(step_container);
 					}
 				} else {
 					var message_html;
 					if (return_data.message_html) {
 						message_html = return_data.message_html;
 					} else {
-						message_html = this.checkout_box_error_template({ error : verify_error });
+						message_html = this.error_template({ error : verify_error });
 					}
 
 					this.add_messages(step_container, message_html);
 				}
-				this.remove_loading(step_container);
 			},
 			error : function() {
-				step_container.find('.js_cart_checkout_box_messages').html(this.checkout_box_error_template({ error : verify_error }));
+				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
 				this.remove_loading(step_container);
 			}
 		})
@@ -277,8 +251,23 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	strip_response_handler : function(status, response) {
-console.log(status);
-console.log(response);
+		var step_container = cart_public_app.checkout.current_step;
+		if (response.error) {
+			// show the errors on the form
+			this.add_messages(step_container, this.error_template({ error : response.error.message }));
+			step_container.find('.js_cart_checkout_box_result').empty();
+		} else {
+			cart_public_app.checkout.stripe_data = response;
+
+			payment_display = cart_public_app.checkout.payment_display_template({
+				card_type : response.card.type,
+				last_4 : response.card.last4
+			});
+			step_container.find('.js_cart_checkout_box_result .js_cart_checkout_payment_display').html(payment_display);
+
+			cart_public_app.checkout.remove_loading(step_container);
+			cart_public_app.checkout.goto_next_step(step_container);
+		}
 	},
 
 	validate_confirm : function(step_container) {
