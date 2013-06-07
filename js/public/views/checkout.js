@@ -3,7 +3,9 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	events : {
 		'click .js_cart_checkout_continue' : 'next_step',
-		'click .js_cart_checkout_box_edit' : 'edit_step'
+		'click .js_cart_checkout_box_edit' : 'edit_step',
+		'click .js_cart_checkout_copy_shipping' : 'copy_shipping',
+		'change .js_cart_checkout_form_billing' : 'billing_changed'
 	},
 
 	initialize : function() {
@@ -83,6 +85,31 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 		var step_container = $(e.target).closest('.js_cart_checkout_step');
 		this.open_step(step_container);
+	},
+
+	copy_shipping : function(e) {
+		e.preventDefault();
+
+		_.each(this.$('.js_cart_checkout_form_shipping input, .js_cart_checkout_form_shipping select'), function(field) {
+			var _field = $(field),
+				field_name = _field.data('cart_shipping_field');
+
+			if (field_name !== 'phone') {
+				this.$('.js_cart_checkout_form_billing [data-cart_billing_field="' + field_name + '"]').val(_field.val());
+			} else {
+				var name_parts = _field.attr('name').split('['),
+					phone_part = name_parts[(name_parts.length - 1)],
+					phone_part_name = phone_part.substring(0, phone_part.length - 1);
+
+				this.$('.js_cart_checkout_form_billing input[name*="' + phone_part_name + '"]').val(_field.val());
+			}
+		}, this);
+
+		$('.js_cart_checkout_form_billing .js_cart_same_as_shipping_flag').val(1);
+	},
+
+	billing_changed : function() {
+		$('.js_cart_checkout_form_billing .js_cart_same_as_shipping_flag').val(0);
 	},
 
 	validate_step : function(step_container) {

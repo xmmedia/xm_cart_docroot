@@ -34,7 +34,7 @@ $side_pad: 0.4em;
 	}
 
 	.cart_checkout_box {
-		border-bottom: 1px solid #c1c1c1; padding: 1em 0; @extend %clearfix;
+		border-bottom: 1px solid #c1c1c1; padding: 0 0 1em 0; margin-bottom: 1em; @extend %clearfix;
 		h2 { margin: 0; }
 		.cart_checkout_box_actions {
 			margin: 1em $side_pad; @extend %clearfix;
