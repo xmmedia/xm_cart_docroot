@@ -390,7 +390,7 @@ console.log(return_data);
 
 	scroll_to : function(element) {
 		$('html, body').animate({
-			scrollTop: element.offset().top
+			scrollTop: element.offset().top - 10
 		}, 500);
 	}
 });
