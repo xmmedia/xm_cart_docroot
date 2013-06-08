@@ -15,7 +15,7 @@ cart_public_app.views.totals = Backbone.View.extend({
 		this.$el.append(this.total_template(total_vars));
 
 		total_vars.name = 'Total';
-		total_vars.total = this.model.get('total_formatted');
+		total_vars.total = this.model.get('grand_total_formatted');
 		total_vars.grand_total = true;
 		this.$el.append(this.total_template(total_vars));
 

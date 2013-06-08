@@ -25,14 +25,17 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 	},
 
 	quantity_changed : function() {
-		this.model.set('quantity', this.$('.js_cart_order_product_quantity').val());
+		var quantity_field = this.$('.js_cart_order_product_quantity');
+		if (quantity_field.length > 0) {
+			this.model.set('quantity', quantity_field.val());
 
-		this.$('.js_cart_order_product_quantity').replaceWith(this.loading_div_template());
+			this.$('.js_cart_order_product_quantity').replaceWith(this.loading_div_template());
 
-		cart_public_app.ajax_action('change_quantity', {
-			cart_order_product_id : this.model.get('id'),
-			quantity : this.model.get('quantity')
-		});
+			cart_public_app.ajax_action('change_quantity', {
+				cart_order_product_id : this.model.get('id'),
+				quantity : this.model.get('quantity')
+			});
+		}
 	},
 
 	update_quantity : function(e) {
