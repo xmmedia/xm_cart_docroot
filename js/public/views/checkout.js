@@ -103,19 +103,19 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		var button = $(e.target),
 			step_container = button.closest('.js_cart_checkout_step'),
 			verify_error = 'There was a problem processing your payment. Please contact us before trying again to prevent duplicate payments.';
-// disable other page events (undelegate?)
+// @todo disable other page events (undelegate?)
 		this.clear_messages(step_container);
 		button.after(this.complete_loading_template());
 
 		// put the stripe data in a field so that it gets sent to the server
-		this.$('.js_cart_checkout_stripe_data').val(JSON.stringify(this.stripe_data));
+		this.$('.js_cart_checkout_stripe_token').val(this.stripe_data.id);
 
 		this.$('.js_cart_checkout_form_complete_order').ajaxForm({
 			dataType : 'JSON',
 			context : this,
 			success : function(return_data) {
-				if (cl4.process_ajax(return_data)) {
-// does this mean it's all good??
+				if (cl4.process_ajax(return_data) && return_data.payment_status == 'success') {
+// @todo does this mean it's all good??
 console.log(return_data);
 				} else {
 					if (return_data.redirect) {
