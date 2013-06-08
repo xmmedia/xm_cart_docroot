@@ -15,15 +15,16 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	stripe_data : {},
 
+	// if true, functionality should not happen
+	// will be set to true when there is ajax going on, such as saving billing or completing the order
+	processing : false,
+
 	initialize : function() {
 		this.steps = this.$('.js_cart_checkout_step');
 
 		_.each(this.steps, function(step) {
 			var _step = $(step);
 			_step.data('cart_checkout_complete', 0);
-			if (_step.data('cart_checkout_step_type') != 'cart') {
-				_step.data('cart_checkout_step_is_open', 0);
-			}
 		}, this);
 
 		this.current_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="cart"]');
@@ -32,6 +33,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	next_step : function(e) {
 		var step_container = $(e.target).closest('.js_cart_checkout_step'),
 			allow_continue = this.validate_step(step_container);
+
+		// if processing, don't process with any functionality
+		if (this.processing) {
+			return;
+		}
 
 		// only allow continue if the validate step returns true right away
 		// in some cases, processing must be done first, so it will return false now
@@ -45,7 +51,6 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		var checkout_view = this;
 
 		step_container.find('.js_cart_checkout_box_open')
-			.data('cart_checkout_step_is_open', 0)
 			.hide().promise().done(function() {
 				step_container.find('.js_cart_checkout_box_closed').show()
 					.promise().done(function() {
@@ -71,7 +76,6 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		var view = this;
 		this.current_step = step_container;
 		step_container.find('.js_cart_checkout_box_closed')
-			.data('cart_checkout_step_is_open', 1)
 			.hide().promise().done(function() {
 				step_container.find('.js_cart_checkout_box_open').show();
 				view.clear_messages(step_container);
@@ -81,7 +85,6 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 	close_step : function(step_container) {
 		step_container.find('.js_cart_checkout_box_open')
-			.data('cart_checkout_step_is_open', 0)
 			.hide().promise().done(function() {
 				step_container.find('.js_cart_checkout_box_closed').show();
 			});
@@ -90,7 +93,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	edit_step : function(e) {
 		e.preventDefault();
 
-		// var open_step = $('.js_cart_checkout_step[data-cart_checkout_step_is_open=1]');
+		// if processing, don't process with any functionality
+		if (this.processing) {
+			return;
+		}
+
 		this.close_step(this.current_step);
 
 		var step_container = $(e.target).closest('.js_cart_checkout_step');
@@ -100,10 +107,16 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	complete_order : function(e) {
 		e.preventDefault();
 
+		// if processing, don't process with any functionality
+		if (this.processing) {
+			return;
+		}
+
 		var button = $(e.target),
 			step_container = button.closest('.js_cart_checkout_step'),
 			verify_error = 'There was a problem processing your payment. Please contact us before trying again to prevent duplicate payments.';
-// @todo disable other page events (undelegate?)
+
+		this.processing = true;
 		this.clear_messages(step_container);
 		button.after(this.complete_loading_template());
 
@@ -115,14 +128,25 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			context : this,
 			success : function(return_data) {
 				if (cl4.process_ajax(return_data) && return_data.payment_status == 'success') {
-// @todo does this mean it's all good??
-console.log(return_data);
+					window.location = '/' + cart_config.prefix + '/completed';
 				} else {
 					if (return_data.redirect) {
 						window.location = return_data.redirect;
 						return;
 					}
 
+					if (return_data.payment_status == 'fail') {
+						window.location = '/' + cart_config.prefix + '/payment_failed';
+					}
+
+					var payment_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="payment"]');
+
+					this.close_step(step_container);
+
+					payment_step.data('cart_checkout_complete', 0);
+					this.open_step(payment_step);
+
+					// payment_status: error or fail
 					var message_html;
 					if (return_data.message_html) {
 						message_html = return_data.message_html;
@@ -130,9 +154,11 @@ console.log(return_data);
 						message_html = this.error_template({ error : verify_error });
 					}
 
-					this.add_messages(step_container, message_html);
+					this.add_messages(payment_step, message_html);
+
+					this.processing = false;
+					this.remove_loading(step_container);
 				}
-				this.remove_loading(step_container);
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
@@ -144,6 +170,11 @@ console.log(return_data);
 
 	copy_shipping : function(e) {
 		e.preventDefault();
+
+		// if processing, don't process with any functionality
+		if (this.processing) {
+			return;
+		}
 
 		_.each(this.$('.js_cart_checkout_form_shipping input, .js_cart_checkout_form_shipping select'), function(field) {
 			var _field = $(field),
@@ -200,6 +231,7 @@ console.log(return_data);
 
 		var verify_error = 'There was a problem verifying your shipping information. Please try again later.';
 
+		this.processing = true;
 		step_container.find('.js_cart_checkout_form_shipping').ajaxForm({
 			dataType : 'JSON',
 			context : this,
@@ -223,9 +255,11 @@ console.log(return_data);
 					this.add_messages(step_container, message_html);
 				}
 				this.remove_loading(step_container);
+				this.processing = false;
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
+				this.processing = false;
 				this.remove_loading(step_container);
 			}
 		})
@@ -240,6 +274,7 @@ console.log(return_data);
 
 		var verify_error = 'There was a problem verifying your billing and payment information. Please try again later.';
 
+		this.processing = true;
 		step_container.find('.js_cart_checkout_form_billing').ajaxForm({
 			dataType : 'JSON',
 			context : this,
@@ -267,6 +302,7 @@ console.log(return_data);
 
 					if (validation_msgs.length > 0) {
 						this.add_messages(step_container, this.payment_error_template({ msgs : validation_msgs }));
+						this.processing = false;
 						this.remove_loading(step_container);
 					} else {
 						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
@@ -303,6 +339,7 @@ console.log(return_data);
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
+				this.processing = false;
 				this.remove_loading(step_container);
 			}
 		})
@@ -326,6 +363,7 @@ console.log(return_data);
 			});
 			step_container.find('.js_cart_checkout_box_result .js_cart_checkout_payment_display').html(payment_display);
 
+			cart_public_app.checkout.processing = false;
 			cart_public_app.checkout.remove_loading(step_container);
 			cart_public_app.checkout.goto_next_step(step_container);
 		}
@@ -337,6 +375,7 @@ console.log(return_data);
 
 		var verify_error = 'There was a problem saving your order. Please try again later.';
 
+		this.processing = true;
 		step_container.find('.js_cart_checkout_form_final').ajaxForm({
 			dataType : 'JSON',
 			context : this,
@@ -360,9 +399,11 @@ console.log(return_data);
 					this.add_messages(step_container, message_html);
 				}
 				this.remove_loading(step_container);
+				this.processing = false;
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
+				this.processing = false;
 				this.remove_loading(step_container);
 			}
 		})
