@@ -35,7 +35,8 @@ var cart_public_app = {
 		cart_public_app.order_products.retrieve();
 	},
 
-	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">')
+	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),
+	error_template : Handlebars.compile('<p><em>{{error}}</em></p>')
 };
 
 Stripe.setPublishableKey(cart_config.stripe_publishable_key);

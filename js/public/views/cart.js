@@ -20,7 +20,6 @@ cart_public_app.views.cart = Backbone.View.extend({
 			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
 		'</div>' +
 		'</div>'),
-	error_template : Handlebars.compile('<p><em>{{error}}</em></p>'),
 
 	events : {
 		'click .js_cart_empty' : 'cart_empty',
@@ -70,7 +69,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 			fail : function(return_data) {
 				cl4.process_ajax(return_data);
 
-				this.$el.html(this.error_template({ error : 'There was a problem emptying your cart. Please try again later.' }));
+				this.$el.html(cart_public_app.error_template({ error : 'There was a problem emptying your cart. Please try again later.' }));
 
 				setTimeout(function() {
 					cart_public_app.order_products.retrieve();
@@ -84,7 +83,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	failed : function() {
-		this.$el.html(this.error_template({ error : 'There was a problem loading your cart. Please try again later.' }));
+		this.$el.html(cart_public_app.error_template({ error : 'There was a problem loading your cart. Please try again later.' }));
 	},
 
 	change_country : function() {

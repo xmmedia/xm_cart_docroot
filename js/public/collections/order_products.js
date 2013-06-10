@@ -26,15 +26,27 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 					}
 					cart_public_app.cart = (new cart_public_app.views.cart({ collection : collection, totals : cart_public_app.totals })).render();
 				} else {
-					cart_public_app.cart.failed();
+					if (cart_public_app.cart) {
+						cart_public_app.cart.failed();
+					} else {
+						cart_public_app.order_products.failed();
+					}
 				}
 			},
 			fail : function(return_data) {
 				cl4.process_ajax(return_data);
-				cart_public_app.cart.failed();
+				if (cart_public_app.cart) {
+					cart_public_app.cart.failed();
+				} else {
+					cart_public_app.order_products.failed();
+				}
 			}
 		});
 
 		return this;
+	},
+
+	failed : function() {
+		$('.js_cart').html(cart_public_app.error_template({ error : 'There was a problem loading your cart. Please try again later.' }));
 	}
 });
