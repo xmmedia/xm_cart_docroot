@@ -22,6 +22,13 @@ cart_public_app.views.totals = Backbone.View.extend({
 	render : function() {
 		var total_vars = {};
 
+		var shipping = this.model.get('shipping');
+		if (shipping.added) {
+			total_vars.name = shipping.display_name;
+			total_vars.total = shipping.amount_formatted;
+			this.$el.append(this.total_template(total_vars));
+		}
+
 		total_vars.name = 'Sub Total';
 		total_vars.total = this.model.get('sub_total_formatted');
 		this.$el.append(this.total_template(total_vars));
