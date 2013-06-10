@@ -15,6 +15,9 @@ $side_pad: 0.4em;
 			text-align: center;
 			a { text-decoration: none; font-weight: bold; color: #f00; }
 		}
+		.location_select {
+			.col_label { text-align: right; padding-top: 0.75em; }
+		}
 		.total_row {
 			.col_name { border-bottom: none; }
 			.col_unit_price { text-align: right; }

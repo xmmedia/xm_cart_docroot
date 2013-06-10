@@ -33,7 +33,9 @@ var cart_public_app = {
 	ajax_promise : function(return_data) {
 		cl4.process_ajax(return_data);
 		cart_public_app.order_products.retrieve();
-	}
+	},
+
+	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">')
 };
 
 Stripe.setPublishableKey(cart_config.stripe_publishable_key);

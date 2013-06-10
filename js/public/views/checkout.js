@@ -413,7 +413,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	add_loading : function(step_container) {
-		step_container.find('.js_cart_checkout_continue').before('<img src="/images/loading.gif" class="js_loading">');
+		step_container.find('.js_cart_checkout_continue').before(cart_public_app.loading_template());
 	},
 
 	remove_loading : function(step_container) {
