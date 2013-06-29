@@ -7,6 +7,7 @@
 	.field {
 		margin-bottom: 0.5em;
 		label:first-of-type { display: block; padding-left: 0.15em; }
+		&.checkbox label:first-of-type { display: inline; }
 	}
 	input[type=radio] { margin-right: 0.5em; }
 	.buttons input { margin-right: 0.6em; }
