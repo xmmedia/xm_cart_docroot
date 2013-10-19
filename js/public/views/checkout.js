@@ -228,7 +228,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			}
 		}, this);
 
-		$('.js_cart_checkout_form_billing .js_cart_same_as_shipping_flag').val(1);
+		this.$('.js_cart_checkout_form_billing .js_cart_same_as_shipping_flag').val(1);
+		this.$('.js_cart_checkout_credit_card_number').focus();
 	},
 
 	billing_changed : function() {
