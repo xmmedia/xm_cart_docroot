@@ -39,8 +39,16 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 		this.current_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="cart"]');
 
+		this.populate_total_rows();
+	},
+
+	populate_total_rows : function(total_rows) {
+		if (arguments.length == 1) {
+			this.total_rows = total_rows;
+		}
+
 		// append the total row table & then add the total rows
-		this.$('.js_cart_totals').append(this.totals_template());
+		this.$('.js_cart_totals').empty().append(this.totals_template());
 		var table = this.$('.js_cart_total_rows tbody');
 		_.each(this.total_rows, function(total_row) {
 			table.append(this.total_row_template(total_row));
@@ -267,6 +275,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			success : function(return_data) {
 				if (cl4.process_ajax(return_data)) {
 					step_container.find('.js_cart_checkout_box_result').html(return_data.shipping_display);
+					this.populate_total_rows(return_data.total_rows);
 					this.goto_next_step(step_container);
 				} else {
 					if (return_data.redirect) {
@@ -335,6 +344,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 						this.remove_loading(step_container);
 					} else {
 						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
+						this.populate_total_rows(return_data.total_rows);
 
 						Stripe.card.createToken({
 							number: credit_card.number,
@@ -413,6 +423,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			success : function(return_data) {
 				if (cl4.process_ajax(return_data)) {
 					step_container.find('.js_cart_checkout_box_result').html(return_data.final_display);
+					this.populate_total_rows(return_data.total_rows);
 					this.goto_next_step(step_container);
 				} else {
 					if (return_data.redirect) {
