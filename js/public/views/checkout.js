@@ -17,7 +17,9 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		'click .js_cart_checkout_copy_shipping' : 'copy_shipping',
 		'change .js_cart_checkout_form_billing' : 'billing_changed',
 		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type',
-		'click .js_cart_checkout_complete_order_submit' : 'complete_order'
+		'click .js_cart_checkout_complete_order_submit' : 'complete_order',
+		'click .js_cart_add_shipping_test_values' : 'add_shipping_test_values',
+		'click .js_cart_add_credit_card_test_values' : 'add_credit_card_test_values'
 	},
 
 	total_rows : {},
@@ -476,5 +478,36 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		$('html, body').animate({
 			scrollTop: element.offset().top - 10
 		}, 500);
+	},
+
+	add_shipping_test_values : function(e) {
+		e.preventDefault();
+
+		var shipping_form = this.$('.js_cart_checkout_form_shipping');
+
+		shipping_form.find('input[data-cart_shipping_field=first_name]').val('John');
+		shipping_form.find('input[data-cart_shipping_field=last_name]').val('Smith');
+		shipping_form.find('input[data-cart_shipping_field=phone][name*=area_code]').val('403');
+		shipping_form.find('input[data-cart_shipping_field=phone][name*=exchange]').val('875');
+		shipping_form.find('input[data-cart_shipping_field=phone][name*=line]').val('4348');
+		shipping_form.find('input[data-cart_shipping_field=email]').val('test@example.com');
+		shipping_form.find('input[data-cart_shipping_field=company]').val('Test Company');
+		shipping_form.find('input[data-cart_shipping_field=address_1]').val('123 1st Street');
+		shipping_form.find('input[data-cart_shipping_field=city]').val('Calgary');
+		shipping_form.find('input[data-cart_shipping_field=state_id]').val(1); // Alberta
+		shipping_form.find('input[data-cart_shipping_field=postal_code]').val('T8M 3D9');
+		shipping_form.find('input[data-cart_shipping_field=country_id]').val(40);
+	},
+
+	add_credit_card_test_values : function(e) {
+		e.preventDefault();
+
+		var security_code = (Math.floor(Math.random() * 10)).toString() + (Math.floor(Math.random() * 10)).toString() + (Math.floor(Math.random() * 10)).toString(),
+			curr_year = (new Date()).getFullYear();
+
+		this.$('.js_cart_checkout_credit_card_number').val('4242424242424242');
+		this.$('.js_cart_checkout_credit_card_security_code').val(security_code);
+		this.$('.js_cart_checkout_credit_card_expiry_date_month').val(Math.floor(Math.random() * (12 - 1 + 1) + 1));
+		this.$('.js_cart_checkout_credit_card_expiry_date_year').val(Math.floor(Math.random() * ((curr_year + 10) - curr_year + 1) + curr_year));
 	}
 });
