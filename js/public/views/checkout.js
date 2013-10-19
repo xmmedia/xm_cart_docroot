@@ -364,6 +364,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					}
 
 					this.add_messages(step_container, message_html);
+					this.processing = false;
+					this.remove_loading(step_container);
 				}
 			},
 			error : function() {
