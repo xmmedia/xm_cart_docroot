@@ -494,9 +494,9 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		shipping_form.find('input[data-cart_shipping_field=company]').val('Test Company');
 		shipping_form.find('input[data-cart_shipping_field=address_1]').val('123 1st Street');
 		shipping_form.find('input[data-cart_shipping_field=city]').val('Calgary');
-		shipping_form.find('input[data-cart_shipping_field=state_id]').val(1); // Alberta
+		shipping_form.find('select[data-cart_shipping_field=state_id]').val(1); // Alberta
 		shipping_form.find('input[data-cart_shipping_field=postal_code]').val('T8M 3D9');
-		shipping_form.find('input[data-cart_shipping_field=country_id]').val(40);
+		shipping_form.find('select[data-cart_shipping_field=country_id]').val(40); // Canada
 	},
 
 	add_credit_card_test_values : function(e) {
