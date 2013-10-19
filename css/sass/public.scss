@@ -7,6 +7,7 @@ $side_pad: 0.4em;
 	.cart_product_list {
 		width: 100%;
 		th, td { padding: 0.5em $side_pad; border-bottom: 1px solid #c1c1c1; }
+		tbody tr:last-child td { border-bottom: none; }
 		th { text-align: left; }
 		.col_name { width: 60%; }
 		.col_quantity { text-align: center; }
