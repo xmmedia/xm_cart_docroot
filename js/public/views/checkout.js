@@ -281,19 +281,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					this.populate_total_rows(return_data.total_rows);
 					this.goto_next_step(step_container);
 				} else {
-					if (return_data.redirect) {
-						window.location = return_data.redirect;
+					// if this return false, then it's a redirect and we don't want to do anything else
+					if (this.display_error_msgs(return_data, step_container, verify_error) === false) {
 						return;
 					}
-
-					var message_html;
-					if (return_data.message_html) {
-						message_html = return_data.message_html;
-					} else {
-						message_html = this.error_template({ error : verify_error });
-					}
-
-					this.add_messages(step_container, message_html);
 				}
 				this.stop_processing(this, step_container);
 			},
@@ -360,19 +351,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 						}, this.strip_response_handler);
 					}
 				} else {
-					if (return_data.redirect) {
-						window.location = return_data.redirect;
+					// if this return false, then it's a redirect and we don't want to do anything else
+					if (this.display_error_msgs(return_data, step_container, verify_error) === false) {
 						return;
 					}
-
-					var message_html;
-					if (return_data.message_html) {
-						message_html = return_data.message_html;
-					} else {
-						message_html = this.error_template({ error : verify_error });
-					}
-
-					this.add_messages(step_container, message_html);
 					this.stop_processing(this, step_container);
 				}
 			},
@@ -421,19 +403,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					this.populate_total_rows(return_data.total_rows);
 					this.goto_next_step(step_container);
 				} else {
-					if (return_data.redirect) {
-						window.location = return_data.redirect;
+					// if this return false, then it's a redirect and we don't want to do anything else
+					if (this.display_error_msgs(return_data, step_container, verify_error) === false) {
 						return;
 					}
-
-					var message_html;
-					if (return_data.message_html) {
-						message_html = return_data.message_html;
-					} else {
-						message_html = this.error_template({ error : verify_error });
-					}
-
-					this.add_messages(step_container, message_html);
 				}
 				this.stop_processing(this, step_container);
 			},
@@ -478,6 +451,22 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		$('html, body').animate({
 			scrollTop: element.offset().top - 10
 		}, 500);
+	},
+
+	display_error_msgs : function(return_data, step_container, verify_error) {
+		if (return_data.redirect) {
+			window.location = return_data.redirect;
+			return false;
+		}
+
+		var message_html;
+		if (return_data.message_html) {
+			message_html = return_data.message_html;
+		} else {
+			message_html = this.error_template({ error : verify_error });
+		}
+
+		this.add_messages(step_container, message_html);
 	},
 
 	add_shipping_test_values : function(e) {
