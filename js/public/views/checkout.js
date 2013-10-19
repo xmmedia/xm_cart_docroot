@@ -4,6 +4,13 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	payment_display_template : Handlebars.compile('<p><strong>Payment Method</strong><br>{{card_type}} ...{{last_4}}</p>'),
 	complete_loading_template : Handlebars.compile('<div class="js_loading"><img src="/images/loading.gif"></div>'),
 
+	totals_template : Handlebars.compile('<table class="cart_product_list js_cart_total_rows"><tbody></tbody></table>'),
+	total_row_template : Handlebars.compile('<tr class="total_row{{#if is_grand_total}} grand_total{{/if}}">' +
+			'<td class="col_name"></td>' +
+			'<td class="col_unit_price" colspan="2">{{name}}</td>' +
+			'<td class="col_amount">{{value_formatted}}</td>' +
+		'</tr>'),
+
 	events : {
 		'click .js_cart_checkout_continue' : 'next_step',
 		'click .js_cart_checkout_box_edit' : 'edit_step',
@@ -13,6 +20,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		'click .js_cart_checkout_complete_order_submit' : 'complete_order'
 	},
 
+	total_rows : {},
 	stripe_data : {},
 
 	// if true, functionality should not happen
@@ -20,6 +28,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	processing : false,
 
 	initialize : function() {
+		this.total_rows = cart_preload.total_rows;
+
 		this.steps = this.$('.js_cart_checkout_step');
 
 		_.each(this.steps, function(step) {
@@ -28,6 +38,13 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		}, this);
 
 		this.current_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="cart"]');
+
+		// append the total row table & then add the total rows
+		this.$('.js_cart_totals').append(this.totals_template());
+		var table = this.$('.js_cart_total_rows tbody');
+		_.each(this.total_rows, function(total_row) {
+			table.append(this.total_row_template(total_row));
+		}, this);
 	},
 
 	next_step : function(e) {
@@ -67,6 +84,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			var _step = $(this.steps[i]);
 			if (_step.data('cart_checkout_complete') === 0) {
 				this.open_step(_step);
+				this.show_cart_totals(_step);
 				break;
 			}
 		}
@@ -80,6 +98,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 				step_container.find('.js_cart_checkout_box_open').show();
 				view.clear_messages(step_container);
 				view.scroll_to(step_container);
+				view.show_cart_totals(step_container);
 			});
 	},
 
@@ -102,6 +121,16 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 		var step_container = $(e.target).closest('.js_cart_checkout_step');
 		this.open_step(step_container);
+	},
+
+	show_cart_totals : function(step_container) {
+		// hide the cart totals if we are opening the complete order step
+		// otherwise, show the cart totals
+		if (step_container.data('cart_checkout_step_type') == 'confirm') {
+			this.$('.js_cart_totals_outside').hide();
+		} else {
+			this.$('.js_cart_totals_outside').show();
+		}
 	},
 
 	complete_order : function(e) {
