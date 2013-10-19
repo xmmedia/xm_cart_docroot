@@ -155,6 +155,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 		this.processing = true;
 		this.clear_messages(step_container);
+		button.prop('disabled', true);
+		this.$('.js_cart_checkout_box_edit').css('visibility', 'hidden');
 		button.after(this.complete_loading_template());
 
 		// put the stripe data in a field so that it gets sent to the server
@@ -193,13 +195,12 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 					this.add_messages(payment_step, message_html);
 
-					this.processing = false;
-					this.remove_loading(step_container);
+					this.stop_processing(this, step_container);
 				}
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
-				this.remove_loading(step_container);
+				this.stop_processing(this, step_container);
 			}
 		})
 		.submit();
@@ -264,12 +265,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	validate_shipping : function(step_container) {
-		this.add_loading(step_container);
+		this.start_processing(this, step_container);
 		this.clear_messages(step_container);
 
 		var verify_error = 'There was a problem verifying your shipping information. Please try again later.';
 
-		this.processing = true;
 		step_container.find('.js_cart_checkout_form_shipping').ajaxForm({
 			dataType : 'JSON',
 			context : this,
@@ -293,13 +293,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 					this.add_messages(step_container, message_html);
 				}
-				this.remove_loading(step_container);
-				this.processing = false;
+				this.stop_processing(this, step_container);
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
-				this.processing = false;
-				this.remove_loading(step_container);
+				this.stop_processing(this, step_container);
 			}
 		})
 		.submit();
@@ -308,12 +306,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	validate_payment : function(step_container) {
-		this.add_loading(step_container);
+		this.start_processing(this, step_container);
 		this.clear_messages(step_container);
 
 		var verify_error = 'There was a problem verifying your billing and payment information. Please try again later.';
 
-		this.processing = true;
 		step_container.find('.js_cart_checkout_form_billing').ajaxForm({
 			dataType : 'JSON',
 			context : this,
@@ -341,8 +338,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 					if (validation_msgs.length > 0) {
 						this.add_messages(step_container, this.payment_error_template({ msgs : validation_msgs }));
-						this.processing = false;
-						this.remove_loading(step_container);
+						this.stop_processing(this, step_container);
 					} else {
 						step_container.find('.js_cart_checkout_box_result').html(return_data.billing_display);
 						this.populate_total_rows(return_data.total_rows);
@@ -375,14 +371,12 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					}
 
 					this.add_messages(step_container, message_html);
-					this.processing = false;
-					this.remove_loading(step_container);
+					this.stop_processing(this, step_container);
 				}
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
-				this.processing = false;
-				this.remove_loading(step_container);
+				this.stop_processing(this, step_container);
 			}
 		})
 		.submit();
@@ -405,19 +399,17 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			});
 			step_container.find('.js_cart_checkout_box_result .js_cart_checkout_payment_display').html(payment_display);
 
-			cart_public_app.checkout.processing = false;
-			cart_public_app.checkout.remove_loading(step_container);
+			cart_public_app.checkout.stop_processing(cart_public_app.checkout, step_container);
 			cart_public_app.checkout.goto_next_step(step_container);
 		}
 	},
 
 	validate_final : function(step_container) {
-		this.add_loading(step_container);
+		this.start_processing(this, step_container);
 		this.clear_messages(step_container);
 
 		var verify_error = 'There was a problem saving your order. Please try again later.';
 
-		this.processing = true;
 		step_container.find('.js_cart_checkout_form_final').ajaxForm({
 			dataType : 'JSON',
 			context : this,
@@ -441,13 +433,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 
 					this.add_messages(step_container, message_html);
 				}
-				this.remove_loading(step_container);
-				this.processing = false;
+				this.stop_processing(this, step_container);
 			},
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
-				this.processing = false;
-				this.remove_loading(step_container);
+				this.stop_processing(this, step_container);
 			}
 		})
 		.submit();
@@ -455,11 +445,21 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		return false;
 	},
 
-	add_loading : function(step_container) {
+	start_processing : function(view, step_container) {
+		view.processing = true;
+		// disable all buttons in the step & hide all edit links
+		step_container.find('input[type="button"], button').prop('disabled', true);
+		view.$('.js_cart_checkout_box_edit').css('visibility', 'hidden');
+		// add loading beside continue button
 		step_container.find('.js_cart_checkout_continue').before(cart_public_app.loading_template());
 	},
 
-	remove_loading : function(step_container) {
+	stop_processing : function(view, step_container) {
+		view.processing = false;
+		// enable buttons in the step & show all edit links
+		step_container.find('input[type="button"], button').prop('disabled', false);
+		view.$('.js_cart_checkout_box_edit').css('visibility', 'visible');
+		// remove all loading spinners
 		step_container.find('.js_loading').remove();
 	},
 
