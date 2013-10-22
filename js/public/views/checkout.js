@@ -344,7 +344,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 							name : return_data.billing_address.first_name + ' ' + return_data.billing_address.last_name,
 							address_line1 : return_data.billing_address.address_1,
 							address_line2 : return_data.billing_address.address_2,
-							address_city : return_data.billing_address.city,
+							address_city : return_data.billing_address.municipality,
 							address_state : return_data.billing_address.state,
 							address_zip : return_data.billing_address.postal_code,
 							address_country : return_data.billing_address.country
@@ -482,7 +482,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		shipping_form.find('input[data-cart_shipping_field=email]').val('test@example.com');
 		shipping_form.find('input[data-cart_shipping_field=company]').val('Test Company');
 		shipping_form.find('input[data-cart_shipping_field=address_1]').val('123 1st Street');
-		shipping_form.find('input[data-cart_shipping_field=city]').val('Calgary');
+		shipping_form.find('input[data-cart_shipping_field=municipality]').val('Calgary');
 		shipping_form.find('select[data-cart_shipping_field=state_id]').val(1); // Alberta
 		shipping_form.find('input[data-cart_shipping_field=postal_code]').val('T8M 3D9');
 		shipping_form.find('select[data-cart_shipping_field=country_id]').val(40); // Canada
