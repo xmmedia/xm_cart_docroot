@@ -19,6 +19,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type',
 		'click .js_cart_checkout_complete_order_submit' : 'complete_order',
 		'click .js_cart_add_shipping_test_values' : 'add_shipping_test_values',
+		'click .js_cart_add_billing_test_values' : 'add_billing_test_values',
 		'click .js_cart_add_credit_card_test_values' : 'add_credit_card_test_values'
 	},
 
@@ -211,6 +212,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	copy_shipping : function(e) {
 		e.preventDefault();
 
+		if ( ! cart_config.enable_shipping) {
+			return;
+		}
+
 		// if processing, don't process with any functionality
 		if (this.processing) {
 			return;
@@ -267,6 +272,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	validate_shipping : function(step_container) {
+		if ( ! cart_config.enable_shipping) {
+			return;
+		}
+
 		this.start_processing(this, step_container);
 		this.clear_messages(step_container);
 
@@ -486,6 +495,25 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		shipping_form.find('select[data-cart_shipping_field=state_id]').val(1); // Alberta
 		shipping_form.find('input[data-cart_shipping_field=postal_code]').val('T8M 3D9');
 		shipping_form.find('select[data-cart_shipping_field=country_id]').val(40); // Canada
+	},
+
+	add_billing_test_values : function(e) {
+		e.preventDefault();
+
+		var billing_form = this.$('.js_cart_checkout_form_billing');
+
+		billing_form.find('input[data-cart_billing_field=first_name]').val('John');
+		billing_form.find('input[data-cart_billing_field=last_name]').val('Smith');
+		billing_form.find('input[data-cart_billing_field=phone][name*=area_code]').val('403');
+		billing_form.find('input[data-cart_billing_field=phone][name*=exchange]').val('875');
+		billing_form.find('input[data-cart_billing_field=phone][name*=line]').val('4348');
+		billing_form.find('input[data-cart_billing_field=email]').val('test@example.com');
+		billing_form.find('input[data-cart_billing_field=company]').val('Test Company');
+		billing_form.find('input[data-cart_billing_field=address_1]').val('123 1st Street');
+		billing_form.find('input[data-cart_billing_field=municipality]').val('Calgary');
+		billing_form.find('select[data-cart_billing_field=state_id]').val(1); // Alberta
+		billing_form.find('input[data-cart_billing_field=postal_code]').val('T8M 3D9');
+		billing_form.find('select[data-cart_billing_field=country_id]').val(40); // Canada
 	},
 
 	add_credit_card_test_values : function(e) {

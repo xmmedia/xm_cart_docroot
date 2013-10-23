@@ -37,7 +37,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 		if (this.collection.size() > 0) {
 			this.$el.html(this.cart_template({
 				cart_route_prefix : cart_config.route_prefix,
-				show_change_shipping_location : ( ! this.options.totals.model.get('show_location_select')),
+				show_change_shipping_location : (cart_config.enable_shipping && ! this.options.totals.model.get('show_location_select')),
 				shipping_country : this.options.totals.model.get('shipping_country'),
 				shipping_state : this.options.totals.model.get('shipping_state')
 			}));
@@ -87,6 +87,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	change_country : function() {
+		if ( ! cart_config.enable_shipping) {
+			return;
+		}
+
 		var country_id = this.$('.js_cart_location_country_id').val();
 		if (country_id) {
 			this.add_location_loading();
@@ -109,6 +113,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	change_state : function() {
+		if ( ! cart_config.enable_shipping) {
+			return;
+		}
+
 		var state_id = this.$('.js_cart_location_state_id').val();
 		if (state_id) {
 			this.add_location_loading();
@@ -125,6 +133,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 	change_shipping_location : function(e) {
 		e.preventDefault();
+
+		if ( ! cart_config.enable_shipping) {
+			return;
+		}
 
 		// the events that take place when the "normal" shipping location is changed, will also happen on this
 		this.$('.js_cart_shipping_location').html('<br>' + this.options.totals.shipping_country_select_template({ countries : cart_config.countries }));
