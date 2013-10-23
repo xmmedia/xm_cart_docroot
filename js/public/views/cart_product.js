@@ -5,7 +5,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="cart_order_product_quantity js_cart_order_product_quantity"><br><a href="" class="cart_order_product_update_quantity js_cart_order_product_update_quantity">Update</a></td>' +
 		'<td class="col_unit_price">{{unit_price_formatted}}</td>' +
 		'<td class="col_amount">{{amount_formatted}}</td>' +
-		'<td class="col_remove"><a href="/{{cart_prefix}}/remove_product" class="js_cart_order_product_remove" title="Remove Item from Cart">X</a></td>'
+		'<td class="col_remove"><a href="/{{cart_route_prefix}}/remove_product" class="js_cart_order_product_remove" title="Remove Item from Cart">X</a></td>'
 	),
 	loading_div_template : Handlebars.compile('<div style="display: inline-block; text-align: center; width: 100%;"><img src="/images/loading.gif"></div>'),
 
@@ -17,7 +17,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 
 	render : function() {
 		var template_vars = _.clone(this.model.attributes);
-		template_vars.cart_prefix = cart_config.prefix;
+		template_vars.cart_route_prefix = cart_config.route_prefix;
 
 		this.$el.html(this.template(template_vars));
 

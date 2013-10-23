@@ -15,7 +15,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left">' +
 				'{{#if show_change_shipping_location}}Current Shipping Location: <span class="js_cart_shipping_location js_location_select">{{#if shipping_state}}{{shipping_state}}, {{/if}}{{shipping_country}} <a href="" class="js_cart_shipping_location_change">Change</a></span><br>{{/if}}' +
-				'<a href="/{{cart_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
+				'<a href="/{{cart_route_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
 			'</div>' +
 			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
 		'</div>' +
@@ -36,7 +36,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	render : function() {
 		if (this.collection.size() > 0) {
 			this.$el.html(this.cart_template({
-				cart_prefix : cart_config.prefix,
+				cart_route_prefix : cart_config.route_prefix,
 				show_change_shipping_location : ( ! this.options.totals.model.get('show_location_select')),
 				shipping_country : this.options.totals.model.get('shipping_country'),
 				shipping_state : this.options.totals.model.get('shipping_state')
@@ -79,7 +79,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	start_checkout : function() {
-		window.location.href = '/' + cart_config.prefix + '/checkout';
+		window.location.href = '/' + cart_config.route_prefix + '/checkout';
 	},
 
 	failed : function() {

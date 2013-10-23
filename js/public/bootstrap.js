@@ -8,7 +8,7 @@ var cart_public_app = {
 		data = data ? _.clone(data) : {};
 
 		var ajax_options = _.defaults(options, {
-			url : '/' + cart_config.prefix + '/' + action,
+			url : '/' + cart_config.route_prefix + '/' + action,
 			data : data,
 			method : 'POST',
 			dataType : 'JSON'

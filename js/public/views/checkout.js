@@ -169,7 +169,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			context : this,
 			success : function(return_data) {
 				if (cl4.process_ajax(return_data) && return_data.payment_status == 'success') {
-					window.location = '/' + cart_config.prefix + '/completed';
+					window.location = '/' + cart_config.route_prefix + '/completed';
 				} else {
 					if (return_data.redirect) {
 						window.location = return_data.redirect;
@@ -177,7 +177,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 					}
 
 					if (return_data.payment_status == 'fail') {
-						window.location = '/' + cart_config.prefix + '/payment_failed';
+						window.location = '/' + cart_config.route_prefix + '/payment_failed';
 					}
 
 					var payment_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="payment"]');
