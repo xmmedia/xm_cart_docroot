@@ -89,7 +89,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	open_next_step : function(current_step) {
-		var next_step_num = parseInt($(current_step).data('cart_checkout_step'), 0) + 1;
+		var next_step_num = parseInt($(current_step).data('cart_checkout_step'), 10) + 1;
 
 		for (i = next_step_num - 1; i < this.steps.length; i ++) {
 			var _step = $(this.steps[i]);

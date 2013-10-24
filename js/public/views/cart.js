@@ -37,9 +37,9 @@ cart_public_app.views.cart = Backbone.View.extend({
 		if (this.collection.size() > 0) {
 			this.$el.html(this.cart_template({
 				cart_route_prefix : cart_config.route_prefix,
-				show_change_shipping_location : (cart_config.enable_shipping && ! this.options.totals.model.get('show_location_select')),
-				shipping_country : this.options.totals.model.get('shipping_country'),
-				shipping_state : this.options.totals.model.get('shipping_state')
+				show_change_shipping_location : (cart_config.enable_shipping && ! this.options.order.get('show_location_select')),
+				shipping_country : this.options.order.get('shipping_country'),
+				shipping_state : this.options.order.get('shipping_state')
 			}));
 
 			var table = this.$('.js_cart_product_list tbody');
@@ -50,7 +50,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 			// append the total rows
 			// we want the innerHTML because it's going to be inside a <div>
-			table.append(this.options.totals.render().el.innerHTML);
+			table.append(this.options.view_totals.render().el.innerHTML);
 		} else {
 			this.$el.html('<p><em>Your cart is currently empty.</em></p>');
 		}
@@ -101,7 +101,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 				context : this,
 				done : function(return_data) {
 					if (cl4.process_ajax(return_data) && return_data.show_state_select) {
-						this.$('.js_location_select').append(this.options.totals.shipping_state_select_template({ states : return_data.states }));
+						this.$('.js_location_select').append(this.options.view_totals.shipping_state_select_template({ states : return_data.states }));
 						this.$('.js_loading').remove();
 					} else {
 						cart_public_app.order_products.retrieve();
@@ -139,6 +139,6 @@ cart_public_app.views.cart = Backbone.View.extend({
 		}
 
 		// the events that take place when the "normal" shipping location is changed, will also happen on this
-		this.$('.js_cart_shipping_location').html('<br>' + this.options.totals.shipping_country_select_template({ countries : cart_config.countries }));
+		this.$('.js_cart_shipping_location').html('<br>' + this.options.view_totals.shipping_country_select_template({ countries : cart_config.countries }));
 	}
 });

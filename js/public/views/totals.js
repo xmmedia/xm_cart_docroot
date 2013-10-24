@@ -1,6 +1,6 @@
 cart_public_app.views.totals = Backbone.View.extend({
 	total_template : Handlebars.compile(
-		'<tr class="total_row{{#if grand_total}} grand_total{{/if}}">' +
+		'<tr class="total_row{{#if is_grand_total}} grand_total{{/if}}">' +
 			'<td class="col_name"></td>' +
 			'<td class="col_unit_price" colspan="2">{{name}}</td>' +
 			'<td class="col_amount">{{total}}</td>' +
@@ -26,20 +26,15 @@ cart_public_app.views.totals = Backbone.View.extend({
 	// note: events cannot be applied to this view because we remove the parent element we adding it to the cart table
 
 	render : function() {
-		var total_vars = {};
+		this.collection.each(function(total_row) {
+			this.$el.append(this.total_template({
+				name : total_row.get('name'),
+				total : total_row.get('value_formatted'),
+				is_grand_total : total_row.get('is_grand_total')
+			}));
+		}, this);
 
-		var shipping = this.model.get('shipping');
-		if (shipping.added) {
-			total_vars.name = shipping.display_name;
-			total_vars.total = shipping.amount_formatted;
-			this.$el.append(this.total_template(total_vars));
-		}
-
-		total_vars.name = 'Sub Total';
-		total_vars.total = this.model.get('sub_total_formatted');
-		this.$el.append(this.total_template(total_vars));
-
-		if (this.model.get('show_location_select')) {
+		if (this.options.order.get('show_location_select')) {
 			if (cart_config.enable_shipping && cart_config.enable_tax) {
 				location_select_msg = this.location_select_msgs.both;
 			} else if (cart_config.enable_shipping) {
@@ -54,17 +49,6 @@ cart_public_app.views.totals = Backbone.View.extend({
 				location_select_msg : location_select_msg
 			}));
 		}
-
-		_.each(this.model.get('taxes'), function(tax) {
-			total_vars.name = tax.name;
-			total_vars.total = tax.amount_formatted;
-			this.$el.append(this.total_template(total_vars));
-		}, this);
-
-		total_vars.name = 'Total';
-		total_vars.total = this.model.get('grand_total_formatted');
-		total_vars.grand_total = true;
-		this.$el.append(this.total_template(total_vars));
 
 		return this;
 	}
