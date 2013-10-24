@@ -1,0 +1,23 @@
+@import "compass", "_vars", "_media", "_clearfix";
+
+.cart_admin_nav { margin-bottom: 1em; }
+
+.cart_form {
+	margin-bottom: 1em;
+	.field {
+		margin-bottom: 0.5em;
+		label:first-of-type { display: block; padding-left: 0.15em; }
+		&.checkbox label:first-of-type { display: inline; }
+	}
+	input[type=radio] { margin-right: 0.5em; }
+	.buttons input { margin-right: 0.6em; }
+}
+
+.cart_order_view_header {
+	h2 { margin-top: 0; }
+}
+
+.cart_rate_list {
+	list-style: none; padding-left: 1em;
+	li { margin-bottom: 1.3em; }
+}
