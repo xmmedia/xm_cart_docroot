@@ -3,6 +3,8 @@
 $side_pad: 0.4em;
 
 .cart {
+	/* mainly for mobile devices because it will cause the selects to be wider than the content/containers/grid */
+	select { max-width: 22.5em; }
 	.hidden { display: none; }
 	.cart_product_list {
 		width: 100%;
@@ -12,22 +14,22 @@ $side_pad: 0.4em;
 		.col_name { width: 60%; }
 		.col_quantity { text-align: center; }
 		.col_unit_price, .col_amount { text-align: right; }
+		.col_unit_price { min-width: 5.8em; }
 		.col_remove {
 			text-align: center;
 			a { text-decoration: none; font-weight: bold; color: #f00; }
 		}
-		.location_select {
-			.col_label { text-align: right; padding-top: 0.75em; }
-		}
 		.total_row {
 			.col_name { border-bottom: none; }
-			.col_unit_price { text-align: right; }
+			.col_unit_price { text-align: right; /* min-width: 10em; */ }
 			.col_amount { text-align: right; }
 		}
 		.grand_total { font-weight: bold; }
 
 		.cart_order_product_quantity { text-align: center; margin-bottom: 0; }
 		.cart_order_product_update_quantity { font-size: 0.85em; text-decoration: none; }
+
+		.cart_product_loading_container { display: inline-block; text-align: center; width: 100%; }
 	}
 	.cart_product_list_editable .col_quantity { padding-top: 0.2em; padding-bottom: 0.3em; }
 
@@ -35,6 +37,10 @@ $side_pad: 0.4em;
 		margin: 1em $side_pad; @extend %clearfix;
 		.cart_actions_left { float: left; }
 		.cart_actions_right { float: right; margin-right: 1em + ($side_pad * 2); /* 1em for X in remove col + it's side padding x 2) */ }
+	}
+	.location_select {
+		.cart_location_country_id { max-width: 19em; }
+		.cart_location_state_id { max-width: 22em; }
 	}
 
 	.cart_checkout_box {
@@ -50,6 +56,9 @@ $side_pad: 0.4em;
 			@extend %clearfix;
 			.cart_billing_address { float: left; width: 50%; }
 			.cart_credit_card { float: left; width: 50%; }
+			@include respond_to(wide_handhelds) {
+				.cart_billing_address, .cart_credit_card { float: none; width: auto; }
+			}
 		}
 
 		.cart_checkout_box_edit { float: right; }
@@ -57,6 +66,14 @@ $side_pad: 0.4em;
 		.cart_checkout_box_billing {
 			.cart_checkout_box_billing_left { float: left; width: 50%; }
 			.cart_checkout_box_billing_right { float: right; width: 50%; }
+		}
+
+		.order_textarea { width: 100%; }
+	}
+
+	.cart_checkout_totals {
+		@include respond_to(wide_handhelds) {
+			.col_name { width: 30%; }
 		}
 	}
 

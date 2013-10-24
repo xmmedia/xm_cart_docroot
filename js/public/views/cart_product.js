@@ -7,7 +7,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		'<td class="col_amount">{{amount_formatted}}</td>' +
 		'<td class="col_remove"><a href="/{{cart_route_prefix}}/remove_product" class="js_cart_order_product_remove" title="Remove Item from Cart">X</a></td>'
 	),
-	loading_div_template : Handlebars.compile('<div style="display: inline-block; text-align: center; width: 100%;"><img src="/images/loading.gif"></div>'),
+	loading_div_template : Handlebars.compile('<div class="cart_product_loading_container"><img src="/images/loading.gif"></div>'),
 
 	events : {
 		'change .js_cart_order_product_quantity' : 'quantity_changed',
