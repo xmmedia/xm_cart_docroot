@@ -1,6 +1,6 @@
 cart_public_app.views.checkout = Backbone.View.extend({
-	error_template : Handlebars.compile('<ul class="cl4_message"><li class="error">{{error}}</li></ul>'),
-	payment_error_template : Handlebars.compile('<ul class="cl4_message"><li class="error"><ul class="cl4_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
+	error_template : Handlebars.compile('<ul class="xm_message"><li class="error">{{error}}</li></ul>'),
+	payment_error_template : Handlebars.compile('<ul class="xm_message"><li class="error"><ul class="xm_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
 	payment_display_template : Handlebars.compile('<p><strong>Payment Method</strong><br>{{card_type}} ...{{last_4}}</p>'),
 	complete_loading_template : Handlebars.compile('<div class="js_loading"><img src="/images/loading.gif"></div>'),
 
@@ -169,7 +169,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			dataType : 'JSON',
 			context : this,
 			success : function(return_data) {
-				if (cl4.process_ajax(return_data) && return_data.payment_status == 'success') {
+				if (xm.process_ajax(return_data) && return_data.payment_status == 'success') {
 					window.location = '/' + cart_config.route_prefix + '/completed';
 				} else {
 					if (return_data.redirect) {
@@ -287,7 +287,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			dataType : 'JSON',
 			context : this,
 			success : function(return_data) {
-				if (cl4.process_ajax(return_data)) {
+				if (xm.process_ajax(return_data)) {
 					step_container.find('.js_cart_checkout_box_result').html(return_data.shipping_display);
 					this.populate_total_rows(return_data.total_rows);
 					this.goto_next_step(step_container);
@@ -319,7 +319,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			dataType : 'JSON',
 			context : this,
 			success : function(return_data) {
-				if (cl4.process_ajax(return_data)) {
+				if (xm.process_ajax(return_data)) {
 					// validate the payment info and then get the token from Stripe
 					var payment_form = step_container.find('.js_cart_checkout_form_payment'),
 						credit_card = {
@@ -409,7 +409,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			dataType : 'JSON',
 			context : this,
 			success : function(return_data) {
-				if (cl4.process_ajax(return_data)) {
+				if (xm.process_ajax(return_data)) {
 					step_container.find('.js_cart_checkout_box_result').html(return_data.final_display);
 					this.populate_total_rows(return_data.total_rows);
 					this.goto_next_step(step_container);

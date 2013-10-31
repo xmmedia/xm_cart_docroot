@@ -96,7 +96,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 		cart_public_app.ajax_action('cart_empty', {}, {
 			context : this,
 			fail : function(return_data) {
-				cl4.process_ajax(return_data);
+				xm.process_ajax(return_data);
 
 				this.$el.html(cart_public_app.error_template({ error : 'There was a problem emptying your cart. Please try again later.' }));
 
@@ -129,7 +129,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 			}, {
 				context : this,
 				done : function(return_data) {
-					if (cl4.process_ajax(return_data) && return_data.show_state_select) {
+					if (xm.process_ajax(return_data) && return_data.show_state_select) {
 						this.$('.js_location_select').append(this.shipping_state_select_template({ states : return_data.states }));
 						this.$('.js_loading').remove();
 					} else {

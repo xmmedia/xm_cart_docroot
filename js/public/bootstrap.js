@@ -31,7 +31,7 @@ var cart_public_app = {
 	},
 
 	ajax_promise : function(return_data) {
-		cl4.process_ajax(return_data);
+		xm.process_ajax(return_data);
 		cart_public_app.order_products.retrieve();
 	},
 
