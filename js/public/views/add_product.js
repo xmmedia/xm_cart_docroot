@@ -20,7 +20,7 @@ cart_public_app.views.add_product = Backbone.View.extend({
 	},
 
 	ajax_promise : function(return_data) {
-		cl4.process_ajax(return_data);
+		xm.process_ajax(return_data);
 		cart_public_app.order_products.retrieve();
 		this.$('input[type="submit"]').prop('disabled', false);
 	}
