@@ -1,9 +1,24 @@
 /**
- * mixin for media queries
+ * mixins for media queries
  * taken from https://gist.github.com/1215856#file-6_media_queries-scss
  */
+@mixin respond_to_min($media) {
+	@if $media == handhelds {
+		@media only screen and (min-width: 479px) { @content }
+	}
+	@else if $media == wide_handhelds {
+		@media only screen and (min-width: 767px) { @content }
+	}
+	@else if $media == tablets {
+		@media only screen and (min-width: 900px) { @content }
+	}
+	@else if $media == wide_tablets {
+		@media only screen and (min-width: 1025px) { @content }
+	}
+}
+
 @mixin respond_to($media) {
- 	@if $media == handhelds {
+	@if $media == handhelds {
 		@media only screen and (max-width: 479px) { @content }
 	}
 	@else if $media == wide_handhelds {
