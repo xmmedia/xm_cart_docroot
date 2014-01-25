@@ -32,7 +32,16 @@ var cart_public_app = {
 
 	ajax_promise : function(return_data) {
 		xm.process_ajax(return_data);
-		cart_public_app.order_products.retrieve();
+		cart_public_app.update_cart();
+	},
+
+	update_cart : function() {
+		if (cart_public_app.router.has_summary) {
+			cart_public_app.summary.retrieve();
+		}
+		if (cart_public_app.router.has_cart) {
+			cart_public_app.order_products.retrieve();
+		}
 	},
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),

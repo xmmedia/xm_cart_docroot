@@ -101,7 +101,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 				this.$el.html(cart_public_app.error_template({ error : 'There was a problem emptying your cart. Please try again later.' }));
 
 				setTimeout(function() {
-					cart_public_app.order_products.retrieve();
+					cart_public_app.update_cart();
 				}, 2000);
 			}
 		});
@@ -133,7 +133,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 						this.$('.js_location_select').append(this.shipping_state_select_template({ states : return_data.states }));
 						this.$('.js_loading').remove();
 					} else {
-						cart_public_app.order_products.retrieve();
+						cart_public_app.update_cart();
 					}
 
 				}

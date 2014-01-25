@@ -3,6 +3,7 @@ cart_public_app.views.summary = Backbone.View.extend({
 		'<span class="cart_summary_section js_cart_summary_items">{{product_count}}</span>' +
 		'<span class="cart_summary_section js_cart_summary_total">{{total}}</span>'
 	),
+	template_empty : Handlebars.compile('<span class="cart_summary_section js_cart_summary_empty">Your cart is empty.</span>'),
 
 	data : {
 		product_count : 0,
@@ -11,6 +12,11 @@ cart_public_app.views.summary = Backbone.View.extend({
 	},
 
 	retrieve : function() {
+		// can't do anything if the summary element doesn't exist
+		if ( ! cart_public_app.router.has_summary) {
+			return this;
+		}
+
 		this.loading();
 
 		cart_public_app.ajax_action('load_summary', {}, {
@@ -45,7 +51,7 @@ cart_public_app.views.summary = Backbone.View.extend({
 		// set the width so loading doesn't make it jump around
 		this.$el.width(this.$el.width());
 		// remove items and totals elements
-		this.$el.find('.js_cart_summary_items, .js_cart_summary_total').remove();
+		this.$el.find('.js_cart_summary_items, .js_cart_summary_total, .js_cart_summary_empty').remove();
 		this.$el.append('<span class="js_loading">Loading...</span>');
 	},
 
@@ -56,10 +62,14 @@ cart_public_app.views.summary = Backbone.View.extend({
 	render : function() {
 		this.remove_loading();
 
-		this.$el.append(this.template({
-			product_count : this.data.product_count + ' item' + (this.data.product_count != 1 ? 's' : ''),
-			total : this.data.total_formatted
-		}));
+		if (this.data.product_count > 0) {
+			this.$el.append(this.template({
+				product_count : this.data.product_count + ' item' + (this.data.product_count != 1 ? 's' : ''),
+				total : this.data.total_formatted
+			}));
+		} else {
+			this.$el.append(this.template_empty());
+		}
 
 		this.$el.width('auto');
 	}
