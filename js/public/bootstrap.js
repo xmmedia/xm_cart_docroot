@@ -59,7 +59,8 @@ var cart_public_app = {
 	},
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),
-	error_template : Handlebars.compile('<p><em>{{error}}</em></p>')
+	empty_cart_template : Handlebars.compile('<div class="cart_empty_msg">Your cart is currently empty.</div>'),
+	error_template : Handlebars.compile('<div class="cart_error_msg">{{error}}</div>')
 };
 
 Stripe.setPublishableKey(cart_config.stripe_publishable_key);

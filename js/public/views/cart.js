@@ -81,7 +81,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 			// we want the innerHTML because it's going to be inside a <div>
 			table.append(this.options.view_totals.render().el.innerHTML);
 		} else {
-			this.$el.html('<p><em>Your cart is currently empty.</em></p>');
+			this.$el.html(cart_public_app.empty_cart_template());
 		}
 
 		return this;

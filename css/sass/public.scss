@@ -9,4 +9,6 @@ $side_pad: 0.4em;
 	@import "public/_product_list", "public/_actions", "public/_location_select", "public/_checkout_box", "public/_checkout_totals", "public/_field";
 }
 
+.cart_empty_msg, .cart_error_msg { font-style: italic; }
+
 @import "_cart_summary", "_cart_summary_details";
