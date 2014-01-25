@@ -1,0 +1,30 @@
+.cart_summary {
+	float: right;
+	min-width: 8em;
+	max-width: 15em;
+	margin: -1em 0;
+	padding: 0.4em 0.5em;
+	cursor: pointer;
+	background: #000;
+	background: rgba(150,150,150,0.6);
+
+	.cart_summary_section {
+		display: inline-block;
+		margin-left: 0.8em;
+		&:first-of-type { margin-left: 0; }
+	}
+
+	// shopping cart icon
+	.xm_icon_cart {
+		background: url('/xm_cart/images/cart.png') no-repeat;
+		height: 14px;
+		width: 14px;
+
+		@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+			background-image: url('/xm_cart/images/cart_2x.png');
+			background-size: 14px 14px;
+		}
+	}
+
+	&.cart_summary_is_open { background: #b0b0b0; }
+}

@@ -1,0 +1,26 @@
+.cart_product_list {
+	width: 100%;
+	th, td { padding: 0.5em $side_pad; border-bottom: 1px solid #c1c1c1; }
+	tbody tr:last-child td { border-bottom: none; }
+	th { text-align: left; }
+	.col_name { width: 60%; }
+	.col_quantity { text-align: center; }
+	.col_unit_price, .col_amount { text-align: right; }
+	.col_unit_price { min-width: 5.8em; }
+	.col_remove {
+		text-align: center;
+		a { text-decoration: none; font-weight: bold; color: #f00; }
+	}
+	.total_row {
+		.col_name { border-bottom: none; }
+		.col_unit_price { text-align: right; /* min-width: 10em; */ }
+		.col_amount { text-align: right; }
+	}
+	.grand_total { font-weight: bold; }
+
+	.cart_order_product_quantity { text-align: center; margin-bottom: 0; }
+	.cart_order_product_update_quantity { font-size: 0.85em; text-decoration: none; }
+
+	.cart_product_loading_container { display: inline-block; text-align: center; width: 100%; }
+}
+.cart_product_list_editable .col_quantity { padding-top: 0.2em; padding-bottom: 0.3em; }

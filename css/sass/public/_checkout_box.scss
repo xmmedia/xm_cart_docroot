@@ -1,0 +1,27 @@
+.cart_checkout_box {
+	border-bottom: 1px solid #c1c1c1; padding: 0 0 1em 0; margin-bottom: 1em; @extend %clearfix;
+	h2 { margin: 0; }
+	.cart_checkout_box_actions {
+		margin: 1em $side_pad; @extend %clearfix;
+		.cart_checkout_box_actions_left { float: left; }
+		.cart_checkout_box_actions_right { float: right; }
+	}
+
+	.cart_billing_container {
+		@extend %clearfix;
+		.cart_billing_address { float: left; width: 50%; }
+		.cart_credit_card { float: left; width: 50%; }
+		@include respond_to(wide_handhelds) {
+			.cart_billing_address, .cart_credit_card { float: none; width: auto; }
+		}
+	}
+
+	.cart_checkout_box_edit { float: right; }
+
+	.cart_checkout_box_billing {
+		.cart_checkout_box_billing_left { float: left; width: 50%; }
+		.cart_checkout_box_billing_right { float: right; width: 50%; }
+	}
+
+	.order_textarea { width: 100%; }
+}

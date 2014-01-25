@@ -1,4 +1,4 @@
-cart_public_app.collections.order_products = Backbone.Collection.extend({
+cart_public_app.collections.order_products_summary = Backbone.Collection.extend({
 	model : cart_public_app.models.order_product,
 
 	retrieve : function() {
@@ -11,8 +11,8 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 
 		collection.reset();
 
-		if (cart_public_app.router && cart_public_app.cart) {
-			cart_public_app.cart.loading();
+		if (cart_public_app.router && cart_public_app.summary_details) {
+			cart_public_app.summary_details.loading();
 		}
 
 		cart_public_app.ajax_action('load_cart', {}, {
@@ -30,17 +30,17 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 					});
 
 					// if there's an existing cart, undelegate the events so that it doesn't stay in memory and still fire events
-					if (cart_public_app.cart) {
-						cart_public_app.cart.undelegateEvents();
+					if (cart_public_app.summary_details) {
+						cart_public_app.summary_details.undelegateEvents();
 					}
-					cart_public_app.cart = (new cart_public_app.views.cart({
+					cart_public_app.summary_details.set_data({
 						collection : collection,
 						order : cart_public_app.order,
 						view_totals : cart_public_app.view_totals
-					})).render();
+					}).render();
 				} else {
-					if (cart_public_app.cart) {
-						cart_public_app.cart.failed();
+					if (cart_public_app.summary_details) {
+						cart_public_app.summary_details.failed();
 					} else {
 						cart_public_app.order_products.failed();
 					}
@@ -48,8 +48,8 @@ cart_public_app.collections.order_products = Backbone.Collection.extend({
 			},
 			fail : function(return_data) {
 				xm.process_ajax(return_data);
-				if (cart_public_app.cart) {
-					cart_public_app.cart.failed();
+				if (cart_public_app.summary_details) {
+					cart_public_app.summary_details.failed();
 				} else {
 					cart_public_app.order_products.failed();
 				}

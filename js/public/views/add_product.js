@@ -6,7 +6,7 @@ cart_public_app.views.add_product = Backbone.View.extend({
 	add_product : function(e) {
 		e.preventDefault();
 
-		cart_public_app.cart.loading();
+		cart_public_app.summary.loading();
 		this.$('input[type="submit"]').prop('disabled', true);
 
 		cart_public_app.ajax_action('add_product', {
@@ -21,7 +21,7 @@ cart_public_app.views.add_product = Backbone.View.extend({
 
 	ajax_promise : function(return_data) {
 		xm.process_ajax(return_data);
-		cart_public_app.order_products.retrieve();
+		cart_public_app.update_cart();
 		this.$('input[type="submit"]').prop('disabled', false);
 	}
 });

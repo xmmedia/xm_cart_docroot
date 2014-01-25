@@ -81,7 +81,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 			// we want the innerHTML because it's going to be inside a <div>
 			table.append(this.options.view_totals.render().el.innerHTML);
 		} else {
-			this.$el.html('<p><em>Your cart is currently empty.</em></p>');
+			this.$el.html(cart_public_app.empty_cart_template());
 		}
 
 		return this;
@@ -98,17 +98,17 @@ cart_public_app.views.cart = Backbone.View.extend({
 			fail : function(return_data) {
 				xm.process_ajax(return_data);
 
-				this.$el.html(cart_public_app.error_template({ error : 'There was a problem emptying your cart. Please try again later.' }));
+				this.failed();
 
 				setTimeout(function() {
-					cart_public_app.order_products.retrieve();
+					cart_public_app.update_cart();
 				}, 2000);
 			}
 		});
 	},
 
 	start_checkout : function() {
-		window.location.href = '/' + cart_config.route_prefix + '/checkout';
+		cart_public_app.start_checkout();
 	},
 
 	failed : function() {
@@ -133,7 +133,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 						this.$('.js_location_select').append(this.shipping_state_select_template({ states : return_data.states }));
 						this.$('.js_loading').remove();
 					} else {
-						cart_public_app.order_products.retrieve();
+						cart_public_app.update_cart();
 					}
 
 				}
