@@ -5,6 +5,10 @@ cart_public_app.views.summary = Backbone.View.extend({
 	),
 	template_empty : Handlebars.compile('<span class="cart_summary_section js_cart_summary_empty">Your cart is empty.</span>'),
 
+	events : {
+		'click' : 'open_summary_details'
+	},
+
 	data : {
 		product_count : 0,
 		total : 0,
@@ -72,5 +76,31 @@ cart_public_app.views.summary = Backbone.View.extend({
 		}
 
 		this.$el.width('auto');
+	},
+
+	open_summary_details : function() {
+		// check if the view object exists
+		// if it doesn't create it
+		// otherwise, it exists and the click on event on 'html' will cause the details to close
+		if ( ! cart_public_app.summary_details) {
+			cart_public_app.summary_details = new cart_public_app.views.summary_details();
+			cart_public_app.order_products_summary = new cart_public_app.collections.order_products_summary().retrieve();
+
+			// changes the colour of the summary element so it matches (non-transparent) the summary details element
+			this.$el.addClass('cart_summary_is_open');
+
+			// set a small timeout, or the close event will trigger before the details are shown
+			var that = this;
+			setTimeout(function() {
+				$('html').on('click', that.close_summary_details);
+			}, 250);
+		}
+	},
+
+	close_summary_details : function() {
+		cart_public_app.summary_details.remove();
+		cart_public_app.summary_details = null;
+		cart_public_app.summary.$el.removeClass('cart_summary_is_open');
+		$('html').off('click', cart_public_app.summary.close_summary_details);
 	}
 });

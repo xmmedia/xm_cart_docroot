@@ -98,7 +98,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 			fail : function(return_data) {
 				xm.process_ajax(return_data);
 
-				this.$el.html(cart_public_app.error_template({ error : 'There was a problem emptying your cart. Please try again later.' }));
+				this.failed();
 
 				setTimeout(function() {
 					cart_public_app.update_cart();
@@ -108,7 +108,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	start_checkout : function() {
-		window.location.href = '/' + cart_config.route_prefix + '/checkout';
+		cart_public_app.start_checkout();
 	},
 
 	failed : function() {

@@ -39,9 +39,16 @@ var cart_public_app = {
 		if (cart_public_app.router.has_summary) {
 			cart_public_app.summary.retrieve();
 		}
+		if (cart_public_app.order_products_summary) {
+			cart_public_app.order_products_summary.retrieve();
+		}
 		if (cart_public_app.router.has_cart) {
 			cart_public_app.order_products.retrieve();
 		}
+	},
+
+	start_checkout : function() {
+		window.location.href = '/' + cart_config.route_prefix + '/checkout';
 	},
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),
