@@ -3,7 +3,7 @@ cart_public_app.collections.order_products_summary = Backbone.Collection.extend(
 
 	retrieve : function() {
 		// can't do anything if the cart element doesn't exist
-		if ( ! cart_public_app.router.has_cart) {
+		if ( ! cart_public_app.has_cart) {
 			return this;
 		}
 

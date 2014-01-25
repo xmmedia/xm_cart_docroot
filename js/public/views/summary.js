@@ -17,7 +17,7 @@ cart_public_app.views.summary = Backbone.View.extend({
 
 	retrieve : function() {
 		// can't do anything if the summary element doesn't exist
-		if ( ! cart_public_app.router.has_summary) {
+		if ( ! cart_public_app.has_summary) {
 			return this;
 		}
 

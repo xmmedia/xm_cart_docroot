@@ -5,19 +5,12 @@ cart_public_app.router = new (Backbone.Router.extend({
 		'product_list' : 'product_list'
 	},
 
-	// set to true in start() if the summary HTML element exists
-	// and therefore we'll update it
-	has_summary : false,
-	// set to true in start() if the cart HTML element exists
-	// and therefore we'll update it
-	has_cart : false,
-
 	start : function() {
 		if ($('.js_cart_summary').length > 0) {
-			this.has_summary = true;
+			cart_public_app.has_summary = true;
 		}
 		if ($('.js_cart').length > 0) {
-			this.has_cart = true;
+			cart_public_app.has_cart = true;
 		}
 
 		Backbone.history.start({
@@ -33,10 +26,10 @@ cart_public_app.router = new (Backbone.Router.extend({
 	},
 
 	product_list : function() {
-		if (this.has_summary) {
+		if (cart_public_app.has_summary) {
 			this.load_summary();
 		}
-		if (this.has_cart) {
+		if (cart_public_app.has_cart) {
 			this.load_cart();
 		}
 

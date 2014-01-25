@@ -3,6 +3,13 @@ var cart_public_app = {
 	views : {},
 	collections : {},
 
+	// set to true in start() if the summary HTML element exists
+	// and therefore we'll update it
+	has_summary : false,
+	// set to true in start() if the cart HTML element exists
+	// and therefore we'll update it
+	has_cart : false,
+
 	ajax_action : function(action, data, options) {
 		options = options ? _.clone(options) : {};
 		data = data ? _.clone(data) : {};
@@ -36,13 +43,13 @@ var cart_public_app = {
 	},
 
 	update_cart : function() {
-		if (cart_public_app.router.has_summary) {
+		if (cart_public_app.has_summary) {
 			cart_public_app.summary.retrieve();
 		}
 		if (cart_public_app.order_products_summary) {
 			cart_public_app.order_products_summary.retrieve();
 		}
-		if (cart_public_app.router.has_cart) {
+		if (cart_public_app.has_cart) {
 			cart_public_app.order_products.retrieve();
 		}
 	},
