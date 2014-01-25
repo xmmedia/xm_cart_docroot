@@ -1,0 +1,5 @@
+.cart_actions {
+	margin: 1em $side_pad; @extend %clearfix;
+	.cart_actions_left { float: left; }
+	.cart_actions_right { float: right; margin-right: 1em + ($side_pad * 2); /* 1em for X in remove col + it's side padding x 2) */ }
+}
