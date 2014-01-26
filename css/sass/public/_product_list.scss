@@ -3,7 +3,10 @@
 	th, td { padding: 0.5em $side_pad; border-bottom: 1px solid #c1c1c1; }
 	tbody tr:last-child td { border-bottom: none; }
 	th { text-align: left; }
-	.col_name { width: 60%; }
+	.col_name {
+		width: 60%;
+		.product_description { font-size: 0.8em; color: lighten(#000, 30%); }
+	}
 	.col_quantity { text-align: center; }
 	.col_unit_price, .col_amount { text-align: right; }
 	.col_unit_price { min-width: 5.8em; }
