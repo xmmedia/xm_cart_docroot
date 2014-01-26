@@ -3,7 +3,7 @@ cart_public_app.collections.order_products_summary = Backbone.Collection.extend(
 
 	retrieve : function() {
 		// can't do anything if the cart element doesn't exist
-		if ( ! cart_public_app.has_cart) {
+		if ( ! cart_public_app.has_summary) {
 			return this;
 		}
 
@@ -22,21 +22,17 @@ cart_public_app.collections.order_products_summary = Backbone.Collection.extend(
 						collection.add(product, { parse : true });
 					});
 
-					cart_public_app.order = new cart_public_app.models.order(return_data.order);
-					cart_public_app.totals = new cart_public_app.collections.totals(return_data.total_rows, { parse : true });
-					cart_public_app.view_totals = new cart_public_app.views.totals({
-						collection : cart_public_app.totals,
-						order : cart_public_app.order
+					cart_public_app.summary_order = new cart_public_app.models.order(return_data.order);
+					cart_public_app.summary_totals = new cart_public_app.collections.totals(return_data.total_rows, { parse : true });
+					cart_public_app.summary_view_totals = new cart_public_app.views.totals({
+						collection : cart_public_app.summary_totals,
+						order : cart_public_app.summary_order
 					});
 
-					// if there's an existing cart, undelegate the events so that it doesn't stay in memory and still fire events
-					if (cart_public_app.summary_details) {
-						cart_public_app.summary_details.undelegateEvents();
-					}
 					cart_public_app.summary_details.set_data({
 						collection : collection,
-						order : cart_public_app.order,
-						view_totals : cart_public_app.view_totals
+						order : cart_public_app.summary_order,
+						view_totals : cart_public_app.summary_view_totals
 					}).render();
 				} else {
 					if (cart_public_app.summary_details) {
