@@ -28,6 +28,8 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 	summary_el : null,
 
 	set_data : function(data) {
+		this.options || (this.options = {});
+
 		this.collection = data.collection;
 		this.options.order = data.order;
 		this.options.view_totals = data.view_totals;
