@@ -2,7 +2,8 @@ cart_public_app.router = new (Backbone.Router.extend({
 	el : $('.js_cart'),
 	routes: {
 		'checkout' : 'checkout',
-		'product_list' : 'product_list'
+		// should work on any path on an entire website
+		'*path' : 'general'
 	},
 
 	start : function() {
@@ -25,7 +26,7 @@ cart_public_app.router = new (Backbone.Router.extend({
 		});
 	},
 
-	product_list : function() {
+	general : function() {
 		if (cart_public_app.has_summary) {
 			this.load_summary();
 		}
