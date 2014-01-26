@@ -1,7 +1,7 @@
 cart_public_app.views.cart_product = Backbone.View.extend({
 	tagName : 'tr',
 	template : Handlebars.compile(
-		'<td class="col_name">{{name}}</td>' +
+		'<td class="col_name">{{name}}{{#if description}}<div class="product_description">{{description}}</div>{{/if}}</td>' +
 		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="cart_order_product_quantity js_cart_order_product_quantity"><br><a href="" class="cart_order_product_update_quantity js_cart_order_product_update_quantity">Update</a></td>' +
 		'<td class="col_unit_price">{{unit_price_formatted}}</td>' +
 		'<td class="col_amount">{{amount_formatted}}</td>' +
