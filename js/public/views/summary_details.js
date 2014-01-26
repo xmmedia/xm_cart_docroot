@@ -21,9 +21,6 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 		'</div>'),
 
 	events : {
-		'click' : function(e) {
-			e.stopImmediatePropagation();
-		},
 		'click .js_cart_empty' : 'cart_empty',
 		'click .js_cart_checkout' : 'start_checkout'
 	},

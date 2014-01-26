@@ -90,17 +90,24 @@ cart_public_app.views.summary = Backbone.View.extend({
 			this.$el.addClass('cart_summary_is_open');
 
 			// set a small timeout, or the close event will trigger before the details are shown
-			var that = this;
 			setTimeout(function() {
-				$('html').on('click', that.close_summary_details);
+				$('html').on('click', cart_public_app.summary.outside_summary_details_click);
 			}, 250);
 		}
 	},
 
+	outside_summary_details_click : function(e) {
+		if (cart_public_app.summary_details.$el.has(e.target).length == 0 && cart_public_app.summary_details.$el.is(e.target) == 0) {
+			cart_public_app.summary.close_summary_details();
+		}
+	},
+
 	close_summary_details : function() {
-		cart_public_app.summary_details.remove();
-		cart_public_app.summary_details = null;
+		if (cart_public_app.summary_details) {
+			cart_public_app.summary_details.remove();
+			delete cart_public_app.summary_details;
+		}
 		cart_public_app.summary.$el.removeClass('cart_summary_is_open');
-		$('html').off('click', cart_public_app.summary.close_summary_details);
+		$('html').off('click', cart_public_app.summary.outside_summary_details_click);
 	}
 });
