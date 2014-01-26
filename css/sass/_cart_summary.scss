@@ -7,6 +7,9 @@
 	cursor: pointer;
 	background: #000;
 	background: rgba(150,150,150,0.6);
+	border-radius: 0.5em;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
 
 	.cart_summary_section {
 		display: inline-block;
@@ -26,5 +29,5 @@
 		}
 	}
 
-	&.cart_summary_is_open { background: #b0b0b0; }
+	&.cart_summary_is_open { background: #b0b0b0; border-radius: 0; }
 }
