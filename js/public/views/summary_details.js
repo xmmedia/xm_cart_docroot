@@ -51,20 +51,27 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 			this.summary_el = cart_public_app.summary.$el;
 		}
 
-		var summary_pos = this.summary_el.position();
-
 		this.$el.html(cart_public_app.loading_template());
 
 		// attach the summary details element to the summary parent element (likely the header)
 		this.summary_el.parent().append(this.$el);
 
 		// try to position the details right below the summary element
+		var summary_pos = this.summary_el.position();
 		this.$el.css({
-				left : (summary_pos.left + parseInt(this.summary_el.width(), 10) - parseInt(this.$el.width(), 10) - 12) + 'px',
-				top : (summary_pos.top + parseInt(this.summary_el.height(), 10) - 2) + 'px'
+				left : this.calculate_el_left_position(summary_pos) + 'px',
+				top : this.calculate_el_top_position(summary_pos) + 'px'
 			});
 
 		return this;
+	},
+
+	calculate_el_left_position : function(summary_pos) {
+		return (summary_pos.left + parseInt(this.summary_el.width(), 10) - parseInt(this.$el.width(), 10) - 12);
+	},
+
+	calculate_el_top_position : function(summary_pos) {
+		return (summary_pos.top + parseInt(this.summary_el.height(), 10) - 2);
 	},
 
 	render : function() {
