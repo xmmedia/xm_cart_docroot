@@ -24,6 +24,11 @@ cart_public_app.router = new (Backbone.Router.extend({
 		cart_public_app.checkout = new cart_public_app.views.checkout({
 			el : $('.js_cart_checkout')
 		});
+
+		// we don't want the summary el to be on the checkout page (confusing)
+		if (cart_public_app.has_summary) {
+			$('.js_cart_summary').remove();
+		}
 	},
 
 	general : function() {
