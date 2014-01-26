@@ -41,6 +41,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 		'click .js_cart_shipping_location_change' : 'change_shipping_location'
 	},
 
+	initialize : function (options) {
+		this.options = options || {};
+	},
+
 	loading : function() {
 		this.$el.html(cart_public_app.loading_template());
 	},
