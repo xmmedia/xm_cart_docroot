@@ -181,6 +181,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 						window.location = '/' + cart_config.route_prefix + '/payment_failed';
 					}
 
+					button.prop('disabled', false);
+
 					var payment_step = this.$('.js_cart_checkout_step[data-cart_checkout_step_type="payment"]');
 
 					this.close_step(step_container);
@@ -204,6 +206,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			error : function() {
 				step_container.find('.js_cart_checkout_box_messages').html(this.error_template({ error : verify_error }));
 				this.stop_processing(this, step_container);
+				button.prop('disabled', false);
 			}
 		})
 		.submit();
