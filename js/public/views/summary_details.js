@@ -15,6 +15,7 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left">' +
 				'<a href="/{{cart_route_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
+				'<a href="{{continue_shopping_url}}" class="js_close_summary_details">Continue Shopping</a>' +
 			'</div>' +
 			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
 		'</div>' +
@@ -22,6 +23,7 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 
 	events : {
 		'click .js_cart_empty' : 'cart_empty',
+		'click .js_close_summary_details' : 'close_summary_details',
 		'click .js_cart_checkout' : 'start_checkout'
 	},
 
@@ -83,7 +85,8 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 
 		if (this.collection.size() > 0) {
 			this.$el.html(this.cart_template({
-				cart_route_prefix : cart_config.route_prefix
+				cart_route_prefix : cart_config.route_prefix,
+				continue_shopping_url : cart_config.continue_shopping_url
 			}));
 
 			var table = this.$('.js_cart_product_list tbody');
@@ -128,5 +131,9 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 
 	failed : function() {
 		this.$el.html(cart_public_app.error_template({ error : 'There was a problem loading your cart. Please try again later.' }));
+	},
+
+	close_summary_details : function() {
+		cart_public_app.summary.close_summary_details();
 	}
 });
