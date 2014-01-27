@@ -89,6 +89,8 @@ cart_public_app.views.summary = Backbone.View.extend({
 			// changes the colour of the summary element so it matches (non-transparent) the summary details element
 			this.$el.addClass('cart_summary_is_open');
 
+			this.scroll_to_summary();
+
 			// set a small timeout, or the close event will trigger before the details are shown
 			setTimeout(function() {
 				$('html').on('click', cart_public_app.summary.outside_summary_details_click);
@@ -96,8 +98,12 @@ cart_public_app.views.summary = Backbone.View.extend({
 		}
 	},
 
+	scroll_to_summary : function() {
+		window.scrollTo(0, 0);
+	},
+
 	outside_summary_details_click : function(e) {
-		if (cart_public_app.summary_details.$el.has(e.target).length == 0 && cart_public_app.summary_details.$el.is(e.target) == 0) {
+		if (cart_public_app.summary_details.$el.has(e.target).length === 0 && ! cart_public_app.summary_details.$el.is(e.target)) {
 			cart_public_app.summary.close_summary_details();
 		}
 	},
