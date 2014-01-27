@@ -3,7 +3,10 @@
 	h2 { margin: 0; }
 	.cart_checkout_box_actions {
 		margin: 1em $side_pad; @extend %clearfix;
-		.cart_checkout_box_actions_left { float: left; }
+		.cart_checkout_box_actions_left {
+			float: left;
+			a { margin-right: 1em; }
+		}
 		.cart_checkout_box_actions_right { float: right; }
 	}
 
