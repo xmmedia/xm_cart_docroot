@@ -22,6 +22,7 @@ cart_public_app.views.add_product = Backbone.View.extend({
 	ajax_promise : function(return_data) {
 		xm.process_ajax(return_data);
 		cart_public_app.update_cart();
+		cart_public_app.summary.open_summary_details();
 		this.$('input[type="submit"]').prop('disabled', false);
 	}
 });
