@@ -20,7 +20,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		'click .js_cart_checkout_complete_order_submit' : 'complete_order',
 		'click .js_cart_add_shipping_test_values' : 'add_shipping_test_values',
 		'click .js_cart_add_billing_test_values' : 'add_billing_test_values',
-		'click .js_cart_add_credit_card_test_values' : 'add_credit_card_test_values'
+		'change .js_cart_add_credit_card_test_values' : 'add_credit_card_test_values'
 	},
 
 	total_rows : {},
@@ -522,14 +522,11 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	},
 
 	add_credit_card_test_values : function(e) {
-		e.preventDefault();
+		var credit_card_vals = JSON.parse($(e.target).val());
 
-		var security_code = (Math.floor(Math.random() * 10)).toString() + (Math.floor(Math.random() * 10)).toString() + (Math.floor(Math.random() * 10)).toString(),
-			curr_year = (new Date()).getFullYear();
-
-		this.$('.js_cart_checkout_credit_card_number').val('4242424242424242');
-		this.$('.js_cart_checkout_credit_card_security_code').val(security_code);
-		this.$('.js_cart_checkout_credit_card_expiry_date_month').val(Math.floor(Math.random() * (12 - 1 + 1) + 1));
-		this.$('.js_cart_checkout_credit_card_expiry_date_year').val(Math.floor(Math.random() * ((curr_year + 10) - curr_year + 1) + curr_year));
+		this.$('.js_cart_checkout_credit_card_number').val(credit_card_vals.card_number);
+		this.$('.js_cart_checkout_credit_card_security_code').val(credit_card_vals.security_code);
+		this.$('.js_cart_checkout_credit_card_expiry_date_month').val(credit_card_vals.expiry_date_month);
+		this.$('.js_cart_checkout_credit_card_expiry_date_year').val(credit_card_vals.expiry_date_year);
 	}
 });
