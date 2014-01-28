@@ -133,7 +133,8 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 		this.$el.html(cart_public_app.error_template({ error : 'There was a problem loading your cart. Please try again later.' }));
 	},
 
-	close_summary_details : function() {
+	close_summary_details : function(e) {
+		e.preventDefault();
 		cart_public_app.summary.close_summary_details();
 	}
 });
