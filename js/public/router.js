@@ -15,7 +15,7 @@ cart_public_app.router = new (Backbone.Router.extend({
 		}
 
 		Backbone.history.start({
-			pushState : true,
+			// pushState : true,
 			root : '/' + cart_config.route_prefix + '/'
 		});
 	},
