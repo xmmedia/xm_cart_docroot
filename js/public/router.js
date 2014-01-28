@@ -1,5 +1,4 @@
 cart_public_app.router = new (Backbone.Router.extend({
-	el : $('.js_cart'),
 	routes: {
 		'checkout' : 'checkout',
 		// should work on any path on an entire website
@@ -14,10 +13,16 @@ cart_public_app.router = new (Backbone.Router.extend({
 			cart_public_app.has_cart = true;
 		}
 
-		Backbone.history.start({
-			// pushState : true,
-			root : '/' + cart_config.route_prefix + '/'
-		});
+		if (window.history && window.history.pushState) {
+			Backbone.history.start({
+				pushState : true,
+				root : '/' + cart_config.route_prefix + '/'
+			});
+		} else if ($('.js_cart_checkout').length > 0) {
+			this.checkout();
+		} else {
+			this.general();
+		}
 	},
 
 	checkout : function() {
