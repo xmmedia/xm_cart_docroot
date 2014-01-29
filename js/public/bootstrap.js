@@ -60,7 +60,18 @@ var cart_public_app = {
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),
 	empty_cart_template : Handlebars.compile('<div class="cart_empty_msg">Your cart is currently empty.</div>'),
-	error_template : Handlebars.compile('<div class="cart_error_msg">{{error}}</div>')
+	error_template : Handlebars.compile('<div class="cart_error_msg">{{error}}</div>'),
+
+	cart_product_list_template : '<table class="cart_product_list cart_product_list_editable js_cart_product_list">' +
+			'<thead><tr>' +
+				'<th class="col_name">Item</th>' +
+				'<th class="col_quantity">Quantity</th>' +
+				'<th class="col_unit_price">Unit Price</th>' +
+				'<th class="col_amount">Amount</th>' +
+				'<th class="col_remove"></th>' +
+			'</tr></thead>' +
+			'<tbody></tbody>' +
+		'</table>'
 };
 
 Stripe.setPublishableKey(cart_config.stripe_publishable_key);

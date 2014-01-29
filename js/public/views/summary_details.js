@@ -2,16 +2,7 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 	className : 'cart_summary_details js_cart_summary_details',
 
 	cart_template : Handlebars.compile('<div class="cart">' +
-		'<table class="cart_product_list cart_product_list_editable js_cart_product_list">' +
-			'<thead><tr>' +
-				'<th class="col_name">Item</th>' +
-				'<th class="col_quantity">Quantity</th>' +
-				'<th class="col_unit_price">Unit Price</th>' +
-				'<th class="col_amount">Amount</th>' +
-				'<th class="col_remove"></th>' +
-			'</tr></thead>' +
-			'<tbody></tbody>' +
-		'</table>' +
+		cart_public_app.cart_product_list_template +
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left">' +
 				'<a href="/{{cart_route_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
