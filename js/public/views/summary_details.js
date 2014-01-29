@@ -2,7 +2,7 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 	className : 'cart_summary_details js_cart_summary_details',
 
 	cart_template : Handlebars.compile('<div class="cart">' +
-		cart_public_app.cart_product_list_template +
+		'{{{product_table}}}' +
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left">' +
 				'<a href="/{{cart_route_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
@@ -77,14 +77,18 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 		if (this.collection.size() > 0) {
 			this.$el.html(this.cart_template({
 				cart_route_prefix : cart_config.route_prefix,
-				continue_shopping_url : cart_config.continue_shopping_url
+				continue_shopping_url : cart_config.continue_shopping_url,
+				product_table : (this.options.order.get('donation_cart') ? cart_public_app.cart_donation_list_template : cart_public_app.cart_product_list_template)
 			}));
 
 			var table = this.$('.js_cart_product_list tbody');
 
 			this.collection.forEach(function(order_product) {
-				table.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
-			});
+				table.append((new cart_public_app.views.cart_product({
+					model : order_product,
+					donation_cart : this.options.order.get('donation_cart')
+				})).render().el);
+			}, this);
 
 			// append the total rows
 			// we want the innerHTML because it's going to be inside a <div>
