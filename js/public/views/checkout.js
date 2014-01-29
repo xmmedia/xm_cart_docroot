@@ -170,7 +170,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 			context : this,
 			success : function(return_data) {
 				if (xm.process_ajax(return_data) && return_data.payment_status == 'success') {
-					window.location = '/' + cart_config.route_prefix + '/completed';
+					window.location = '/' + cart_config.route_prefix + '/completed' + (return_data.is_donation_cart ? '?is_donation_cart=1' : '');
 				} else {
 					if (return_data.redirect) {
 						window.location = return_data.redirect;

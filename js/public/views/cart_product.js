@@ -7,6 +7,10 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		'<td class="col_amount">{{amount_formatted}}</td>' +
 		'<td class="col_remove"><a href="/{{cart_route_prefix}}/remove_product" class="js_cart_order_product_remove" title="Remove Item from Cart">X</a></td>'
 	),
+	donation_template : Handlebars.compile(
+		'<td class="col_name">{{name}}{{#if description}}<div class="product_description">{{description}}</div>{{/if}}</td>' +
+		'<td class="col_amount">{{amount_formatted}}</td>'
+	),
 	loading_div_template : Handlebars.compile('<div class="cart_product_loading_container"><img src="/images/loading.gif"></div>'),
 
 	events : {
@@ -15,11 +19,21 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		'click .js_cart_order_product_remove' : 'remove_product'
 	},
 
+	initialize : function(options) {
+		this.options || (this.options = {});
+
+		this.options.donation_cart = options.donation_cart;
+	},
+
 	render : function() {
 		var template_vars = _.clone(this.model.attributes);
 		template_vars.cart_route_prefix = cart_config.route_prefix;
 
-		this.$el.html(this.template(template_vars));
+		if (this.options.donation_cart) {
+			this.$el.html(this.donation_template(template_vars));
+		} else {
+			this.$el.html(this.template(template_vars));
+		}
 
 		return this;
 	},

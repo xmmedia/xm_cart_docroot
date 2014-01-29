@@ -71,6 +71,13 @@ var cart_public_app = {
 				'<th class="col_remove"></th>' +
 			'</tr></thead>' +
 			'<tbody></tbody>' +
+		'</table>',
+	cart_donation_list_template : '<table class="cart_product_list cart_product_list_editable js_cart_product_list">' +
+			'<thead><tr>' +
+				'<th class="col_name"></th>' +
+				'<th class="col_amount">Amount</th>' +
+			'</tr></thead>' +
+			'<tbody></tbody>' +
 		'</table>'
 };
 

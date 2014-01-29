@@ -2,7 +2,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	el : $('.js_cart'),
 
 	cart_template : Handlebars.compile('<div class="cart">' +
-		cart_public_app.cart_product_list_template +
+		'{{{product_table}}}' +
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left">' +
 				'<div class="location_select">' +
@@ -63,14 +63,18 @@ cart_public_app.views.cart = Backbone.View.extend({
 				location_select_msg : location_select_msg,
 				country_select : country_select,
 				shipping_country : this.options.order.get('shipping_country'),
-				shipping_state : this.options.order.get('shipping_state')
+				shipping_state : this.options.order.get('shipping_state'),
+				product_table : (this.options.order.get('donation_cart') ? cart_public_app.cart_donation_list_template : cart_public_app.cart_product_list_template)
 			}));
 
 			var table = this.$('.js_cart_product_list tbody');
 
 			this.collection.forEach(function(order_product) {
-				table.append((new cart_public_app.views.cart_product({ model : order_product })).render().el);
-			});
+				table.append((new cart_public_app.views.cart_product({
+					model : order_product,
+					donation_cart : this.options.order.get('donation_cart')
+				})).render().el);
+			}, this);
 
 			// append the total rows
 			// we want the innerHTML because it's going to be inside a <div>
