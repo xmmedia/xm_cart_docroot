@@ -55,7 +55,12 @@ var cart_public_app = {
 	},
 
 	start_checkout : function() {
-		window.location.href = '/' + cart_config.route_prefix + '/checkout';
+		var cart_uri = '/' + cart_config.route_prefix + '/checkout';
+		if (cart_config.checkout_https && window.location.protocol == 'http:') {
+			window.location = 'https://' + window.location.host + cart_uri;
+		} else {
+			window.location.href = cart_uri;
+		}
 	},
 
 	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),
