@@ -14,6 +14,9 @@ var cart_public_app = {
 		options = options ? _.clone(options) : {};
 		data = data ? _.clone(data) : {};
 
+		// make sure it's set as ajax for PHP
+		data.c_ajax = 1;
+
 		var ajax_options = _.defaults(options, {
 			url : '/' + cart_config.route_prefix + '/' + action,
 			data : data,
