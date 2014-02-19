@@ -1,5 +1,6 @@
 .cart_checkout_totals {
-	@include respond_to(wide_handhelds) {
-		.col_name { width: 30%; }
+	.col_name { width: 30%; }
+	@include respond_to_min(wide_handhelds) {
+		.col_name { width: auto; }
 	}
 }

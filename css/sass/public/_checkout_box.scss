@@ -12,10 +12,8 @@
 
 	.cart_billing_container {
 		@extend %clearfix;
-		.cart_billing_address { float: left; width: 50%; }
-		.cart_credit_card { float: left; width: 50%; }
-		@include respond_to(wide_handhelds) {
-			.cart_billing_address, .cart_credit_card { float: none; width: auto; }
+		@include respond_to_min(wide_handhelds) {
+			.cart_billing_address, .cart_credit_card { float: left; width: 50%; }
 		}
 	}
 
