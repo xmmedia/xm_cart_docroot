@@ -15,6 +15,9 @@
 	@else if $media == wide_tablets {
 		@media only screen and (min-width: 1025px) { @content }
 	}
+	@else {
+		@media only screen and (min-width: $media) { @content }
+	}
 }
 
 @mixin respond_to($media) {
@@ -30,4 +33,11 @@
 	@else if $media == wide_tablets {
 		@media only screen and (max-width: 1025px) { @content }
 	}
+	@else {
+		@media only screen and (max-width: $media) { @content }
+	}
+}
+
+@mixin respond_to_retina() {
+	@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) { @content }
 }
