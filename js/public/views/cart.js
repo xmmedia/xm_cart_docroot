@@ -37,7 +37,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	loading : function() {
-		this.$el.html(cart_public_app.loading_template());
+		this.$el.html(xm.spinner);
 	},
 
 	render : function() {
@@ -156,7 +156,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	add_location_loading : function() {
-		this.$('.js_location_select').append(cart_public_app.loading_template());
+		this.$('.js_location_select').append(xm.spinner);
 	},
 
 	change_shipping_location : function(e) {

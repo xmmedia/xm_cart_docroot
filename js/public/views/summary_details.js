@@ -46,7 +46,7 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 			this.summary_el = cart_public_app.summary.$el;
 		}
 
-		this.$el.html(cart_public_app.loading_template());
+		this.$el.html(xm.spinner);
 
 		// attach the summary details element to the summary parent element (likely the header)
 		this.summary_el.parent().append(this.$el);
