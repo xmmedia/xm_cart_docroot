@@ -2,7 +2,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	error_template : Handlebars.compile('<ul class="xm_message"><li class="error">{{error}}</li></ul>'),
 	payment_error_template : Handlebars.compile('<ul class="xm_message"><li class="error"><ul class="xm_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
 	payment_display_template : Handlebars.compile('<p><strong>Payment Method</strong><br>{{card_type}} ...{{last_4}}</p>'),
-	complete_loading_template : Handlebars.compile('<div class="js_loading"><img src="/images/loading.gif"></div>'),
+	complete_loading_template : Handlebars.compile('<div class="js_loading">' + xm.spinner + '</div>'),
 
 	totals_template : Handlebars.compile('<table class="cart_product_list js_cart_total_rows"><tbody></tbody></table>'),
 	total_row_template : Handlebars.compile('<tr class="total_row{{#if is_grand_total}} grand_total{{/if}}">' +
@@ -440,7 +440,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		step_container.find('input[type="button"], button').prop('disabled', true);
 		view.$('.js_cart_checkout_box_edit').css('visibility', 'hidden');
 		// add loading beside continue button
-		step_container.find('.js_cart_checkout_continue').before(cart_public_app.loading_template());
+		step_container.find('.js_cart_checkout_continue').before(xm.spinner);
 	},
 
 	stop_processing : function(view, step_container) {

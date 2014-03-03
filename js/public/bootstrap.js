@@ -66,7 +66,6 @@ var cart_public_app = {
 		}
 	},
 
-	loading_template : Handlebars.compile('<img src="/images/loading.gif" class="js_loading">'),
 	empty_cart_template : Handlebars.compile('<div class="cart_empty_msg">Your cart is currently empty.</div>'),
 	error_template : Handlebars.compile('<div class="cart_error_msg">{{error}}</div>'),
 
