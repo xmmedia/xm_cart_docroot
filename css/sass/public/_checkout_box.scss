@@ -7,7 +7,10 @@
 			float: left;
 			a { margin-right: 1em; }
 		}
-		.cart_checkout_box_actions_right { float: right; }
+		.cart_checkout_box_actions_right {
+			float: right;
+			.xm_spinner { float: right; }
+		}
 	}
 
 	.cart_billing_container {
