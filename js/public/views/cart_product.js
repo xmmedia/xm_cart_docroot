@@ -11,7 +11,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		'<td class="col_name">{{name}}{{#if description}}<div class="product_description">{{description}}</div>{{/if}}</td>' +
 		'<td class="col_amount">{{amount_formatted}}</td>'
 	),
-	loading_div_template : Handlebars.compile('<div class="cart_product_loading_container">' + xm.spinner + '</div>'),
+	loading_div_template : Handlebars.compile('<div class="cart_product_loading_container">' + cart_public_app.loading_template() + '</div>'),
 
 	events : {
 		'change .js_cart_order_product_quantity' : 'quantity_changed',

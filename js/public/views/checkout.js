@@ -440,7 +440,8 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		step_container.find('input[type="button"], button').prop('disabled', true);
 		view.$('.js_cart_checkout_box_edit').css('visibility', 'hidden');
 		// add loading beside continue button
-		step_container.find('.js_cart_checkout_continue').before(xm.spinner);
+		step_container.find('.js_cart_checkout_continue').before(cart_public_app.loading_template());
+		step_container.find('.js_cart_checkout_complete_order_submit').after(cart_public_app.loading_template());
 	},
 
 	stop_processing : function(view, step_container) {
