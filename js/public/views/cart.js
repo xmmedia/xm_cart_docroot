@@ -156,7 +156,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 	},
 
 	add_location_loading : function() {
-		this.$('.js_location_select').append(xm.spinner);
+		this.$('.js_location_select').append(cart_public_app.loading_template());
 	},
 
 	change_shipping_location : function(e) {
