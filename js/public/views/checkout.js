@@ -362,7 +362,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 							address_state : return_data.billing_address.state,
 							address_zip : return_data.billing_address.postal_code,
 							address_country : return_data.billing_address.country
-						}, this.strip_response_handler);
+						}, this.stripe_response_handler);
 					}
 				} else {
 					// if this return false, then it's a redirect and we don't want to do anything else
@@ -382,7 +382,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		return false;
 	},
 
-	strip_response_handler : function(status, response) {
+	stripe_response_handler : function(status, response) {
 		var step_container = cart_public_app.checkout.current_step;
 		if (response.error) {
 			// show the errors on the form
