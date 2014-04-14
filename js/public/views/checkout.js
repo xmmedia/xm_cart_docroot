@@ -1,6 +1,6 @@
 cart_public_app.views.checkout = Backbone.View.extend({
 	error_template : Handlebars.compile('<ul class="xm_message"><li class="error">{{error}}</li></ul>'),
-	payment_error_template : Handlebars.compile('<ul class="xm_message"><li class="error"><ul class="xm_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
+	payment_error_template : Handlebars.compile('<ul class="xm_message"><li class="error">Please fix the following:<ul class="xm_message_validation">{{#each msgs}}<li>{{this}}</li>{{/each}}</ul></li></ul>'),
 	payment_display_template : Handlebars.compile('<p><strong>Payment Method</strong><br>{{card_type}} ...{{last_4}}</p>'),
 	complete_loading_template : Handlebars.compile('<div class="js_loading">' + xm.spinner + '</div>'),
 
