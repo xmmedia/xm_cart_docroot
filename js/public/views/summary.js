@@ -93,7 +93,8 @@ cart_public_app.views.summary = Backbone.View.extend({
 
 			// set a small timeout, or the close event will trigger before the details are shown
 			setTimeout(function() {
-				$('html').on('click', cart_public_app.summary.outside_summary_details_click);
+				// only execute once
+				$('html').one('click', cart_public_app.summary.outside_summary_details_click);
 			}, 250);
 		}
 	},
