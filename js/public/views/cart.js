@@ -16,7 +16,8 @@ cart_public_app.views.cart = Backbone.View.extend({
 		'</div>'),
 
 	shipping_country_select_template : Handlebars.compile('<select name="" class="cart_location_country_id js_cart_location_country_id"><option value="">-- Select Your Shipping Country --</option>{{#each countries}}<option value="{{id}}">{{name}}</option>{{/each}}</select>'),
-	shipping_state_select_template : Handlebars.compile('<select name="" class="cart_location_state_id js_cart_location_state_id"><option value="">-- Select Your Shipping Province/State --</option>{{#each states}}<option value="{{id}}">{{name}}</option>{{/each}}</select>'),
+	shipping_state_select_template : Handlebars.compile('<select name="" class="cart_location_state_id js_cart_location_state_id"><option value="">{{shipping_select_default_option}}</option>{{#each states}}<option value="{{id}}">{{name}}</option>{{/each}}</select>'),
+	shipping_select_default_option : '-- Select Your Shipping Province/State --',
 	// messages that appear beside the location select depending on if the shipping & tax functionality is enabled
 	location_select_msgs : {
 		both : 'To calculate taxes and shipping, select your shipping location:',
@@ -54,7 +55,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 					location_select_msg = this.location_select_msgs.only_tax;
 				}
 
-				country_select = this.shipping_country_select_template({ countries : cart_config.countries });
+				// don't generate the country select when the shipping country is disabled
+				if (cart_config.show_shipping_country) {
+					country_select = this.shipping_country_select_template({ countries : cart_config.countries });
+				}
 			}
 
 			this.$el.html(this.cart_template({
@@ -79,6 +83,12 @@ cart_public_app.views.cart = Backbone.View.extend({
 			// append the total rows
 			// we want the innerHTML because it's going to be inside a <div>
 			table.append(this.options.view_totals.render().el.innerHTML);
+
+			// when the shipping country is disabled, trigger the save country
+			// which will then trigger the state select to show
+			if ( ! show_change_shipping_location && ! cart_config.show_shipping_country) {
+				this.change_country(cart_config.default_country_id);
+			}
 		} else {
 			this.$el.html(cart_public_app.empty_cart_template());
 		}
@@ -114,12 +124,15 @@ cart_public_app.views.cart = Backbone.View.extend({
 		this.$el.html(cart_public_app.error_template({ error : 'There was a problem loading your cart. Please try again later.' }));
 	},
 
-	change_country : function() {
+	change_country : function(country_id) {
 		if ( ! cart_config.enable_shipping) {
 			return;
 		}
 
-		var country_id = this.$('.js_cart_location_country_id').val();
+		if (arguments.length == 0) {
+			var country_id = this.$('.js_cart_location_country_id').val();
+		}
+
 		if (country_id) {
 			this.add_location_loading();
 
@@ -129,7 +142,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 				context : this,
 				done : function(return_data) {
 					if (xm.process_ajax(return_data) && return_data.show_state_select) {
-						this.$('.js_location_select').append(this.shipping_state_select_template({ states : return_data.states }));
+						this.$('.js_location_select').append(this.shipping_state_select_template({
+							states : return_data.states,
+							shipping_select_default_option : this.shipping_select_default_option
+						}));
 						this.$('.js_loading').remove();
 					} else {
 						cart_public_app.update_cart();
@@ -166,7 +182,12 @@ cart_public_app.views.cart = Backbone.View.extend({
 			return;
 		}
 
-		// the events that take place when the "normal" shipping location is changed, will also happen on this
-		this.$('.js_cart_shipping_location').html('<br>' + this.shipping_country_select_template({ countries : cart_config.countries }));
+		// shipping country disabled, so immediately save the country and load the state select
+		if ( ! cart_config.show_shipping_country) {
+			this.change_country(cart_config.default_country_id);
+		} else {
+			// the events that take place when the "normal" shipping location is changed, will also happen on this
+			this.$('.js_cart_shipping_location').html('<br>' + this.shipping_country_select_template({ countries : cart_config.countries }));
+		}
 	}
 });
