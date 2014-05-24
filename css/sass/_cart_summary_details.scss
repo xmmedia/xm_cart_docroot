@@ -6,14 +6,22 @@
 	height: auto;
 	width: 40em;
 	padding: 0.8em 1em;
-	background: #b0b0b0;
+	background: #c6c6c6;
 	border-radius: 0.8em;
 	border-top-right-radius: 0;
+
+	.cart .cart_product_list .col_remove a { color: #bb2300; }
+	.cart .cart_product_list th, .cart .cart_product_list td { border-bottom-color: #aeaeae; }
+
+	a {
+		&, &:visited { color: #2b82cb; }
+	}
 
 	.cart_actions {
 		margin-right: 0;
 		margin-bottom: 0;
 		margin-left: 0;
+		.cart_actions_left { margin-left: 0.3em; }
 		.cart_actions_right { margin-right: 0; }
 	}
 }

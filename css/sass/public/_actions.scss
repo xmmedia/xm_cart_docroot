@@ -1,8 +1,10 @@
 .cart_actions {
 	margin: 1em $side_pad; @extend %clearfix;
+	a { display: inline-block; margin-top: 0.4em; }
 	.cart_actions_left {
 		float: left;
 		a { margin-right: 1em; }
 	}
+	.cart_actions_center { float: left; margin-left: 13em; }
 	.cart_actions_right { float: right; margin-right: 1em + ($side_pad * 2); /* 1em for X in remove col + it's side padding x 2) */ }
 }

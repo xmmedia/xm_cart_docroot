@@ -19,9 +19,9 @@ cart_public_app.views.cart = Backbone.View.extend({
 	shipping_state_select_template : Handlebars.compile('<select name="" class="cart_location_state_id js_cart_location_state_id"><option value="">-- Select Your Shipping Province/State --</option>{{#each states}}<option value="{{id}}">{{name}}</option>{{/each}}</select>'),
 	// messages that appear beside the location select depending on if the shipping & tax functionality is enabled
 	location_select_msgs : {
-		both : 'To calculate the taxes and shipping, select your shipping location:',
-		only_shipping : 'To calculate the shipping, select your shipping location:',
-		only_tax : 'To calculate the taxes, select your shipping location:'
+		both : 'To calculate taxes and shipping, select your shipping location:',
+		only_shipping : 'To calculate shipping, select your shipping location:',
+		only_tax : 'To calculate taxes, select your shipping location:'
 	},
 
 	events : {
