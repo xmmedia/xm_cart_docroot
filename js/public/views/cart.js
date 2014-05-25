@@ -6,7 +6,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left">' +
 				'<div class="location_select">' +
-					'{{#if show_change_shipping_location}}Current Shipping Location: <span class="js_cart_shipping_location js_location_select">{{#if shipping_state}}{{shipping_state}}, {{/if}}{{shipping_country}} <a href="" class="js_cart_shipping_location_change">Change</a></span>' +
+					'{{#if show_shipping_location_msg}}Current Shipping Location: <span class="js_cart_shipping_location js_location_select">{{#if shipping_state}}{{shipping_state}}, {{/if}}{{shipping_country}} <a href="" class="js_cart_shipping_location_change">Change</a></span>' +
 					'{{else}}{{location_select_msg}}<br><span class="js_location_select">{{{country_select}}}</span>{{/if}}' +
 				'</div>' +
 				'<a href="{{continue_shopping_url}}">Continue Shopping</a>' +
@@ -44,10 +44,10 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 	render : function() {
 		if (this.collection.size() > 0) {
-			var show_change_shipping_location = (cart_config.enable_shipping && ! this.options.order.get('show_location_select')),
+			var show_shipping_location_msg = (cart_config.enable_shipping && ! this.options.order.get('show_location_select')),
 				location_select_msg,
 				country_select;
-			if ( ! show_change_shipping_location) {
+			if ( ! show_shipping_location_msg) {
 				if (cart_config.enable_shipping && cart_config.enable_tax) {
 					location_select_msg = this.location_select_msgs.both;
 				} else if (cart_config.enable_shipping) {
@@ -65,7 +65,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 			this.$el.html(this.cart_template({
 				cart_route_prefix : cart_config.route_prefix,
 				continue_shopping_url : cart_config.continue_shopping_url,
-				show_change_shipping_location : show_change_shipping_location,
+				show_shipping_location_msg : show_shipping_location_msg,
 				location_select_msg : location_select_msg,
 				country_select : country_select,
 				shipping_country : this.options.order.get('shipping_country'),
@@ -88,7 +88,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 			// when the shipping country is disabled, trigger the save country
 			// which will then trigger the state select to show
-			if ( ! show_change_shipping_location && ! cart_config.show_shipping_country) {
+			if ( ! show_shipping_location_msg && ! cart_config.show_shipping_country) {
 				this.change_country(cart_config.default_country_id);
 			}
 		} else {
