@@ -9,6 +9,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 					'{{#if show_change_shipping_location}}Current Shipping Location: <span class="js_cart_shipping_location js_location_select">{{#if shipping_state}}{{shipping_state}}, {{/if}}{{shipping_country}} <a href="" class="js_cart_shipping_location_change">Change</a></span>' +
 					'{{else}}{{location_select_msg}}<br><span class="js_location_select">{{{country_select}}}</span>{{/if}}' +
 				'</div>' +
+				'<a href="{{continue_shopping_url}}">Continue Shopping</a>' +
 				'<a href="/{{cart_route_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
 			'</div>' +
 			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
@@ -63,6 +64,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 
 			this.$el.html(this.cart_template({
 				cart_route_prefix : cart_config.route_prefix,
+				continue_shopping_url : cart_config.continue_shopping_url,
 				show_change_shipping_location : show_change_shipping_location,
 				location_select_msg : location_select_msg,
 				country_select : country_select,
