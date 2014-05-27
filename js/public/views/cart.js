@@ -12,7 +12,7 @@ cart_public_app.views.cart = Backbone.View.extend({
 				'<a href="{{continue_shopping_url}}">Continue Shopping</a>' +
 				'<a href="/{{cart_route_prefix}}/cart_empty" class="js_cart_empty">Empty Cart</a>' +
 			'</div>' +
-			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
+			'<div class="cart_actions_right"><button class="js_cart_checkout">Checkout</button></div>' +
 		'</div>' +
 		'</div>'),
 
