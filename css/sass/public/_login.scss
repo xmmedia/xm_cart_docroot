@@ -1,0 +1,13 @@
+/* used in the cart login page */
+.cart_login_container {
+	min-height: 18em;
+	padding-right: 2em;
+	border-right: 1px solid #ccc;
+	&:last-of-type { padding-right: 0; border-right: none; }
+
+	button { font-size: 1.2em; }
+
+	.cart_field input { width: 100%; max-width: 18em; }
+	.buttons { margin-top: 1em; }
+	.go_link { margin: 1.2em 0; }
+}
