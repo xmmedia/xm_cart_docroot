@@ -36,6 +36,9 @@
 	}
 	.copy_shipping { margin: 0.8em 0 0.3em; }
 
+	// last box on the page, no border
+	&.cart_checkout_box_confirm { border-bottom: none; }
+
 	.order_textarea { width: 100%; }
 
 	.test_select_container { margin: 0.5em 0; }
