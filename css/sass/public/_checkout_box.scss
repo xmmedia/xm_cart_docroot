@@ -1,6 +1,7 @@
 .cart_checkout_box {
 	border-bottom: 1px solid #c1c1c1; padding: 0 0 1em 0; margin-bottom: 1em; @extend %clearfix;
 	h2 { margin: 0; }
+	h3 { margin: 1.3em 0 0.3em 0; }
 	.cart_checkout_box_actions {
 		margin: 1em $side_pad; @extend %clearfix;
 		.cart_checkout_box_actions_left {
@@ -26,6 +27,9 @@
 		.cart_checkout_box_billing_left { float: left; width: 50%; }
 		.cart_checkout_box_billing_right { float: right; width: 50%; }
 	}
+	.copy_shipping { margin: 0.8em 0 0.3em; }
 
 	.order_textarea { width: 100%; }
+
+	.test_select_container { margin: 0.5em 0; }
 }
