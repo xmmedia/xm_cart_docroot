@@ -6,7 +6,7 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 		'<div class="cart_actions">' +
 			'<div class="cart_actions_left"><a href="" class="js_cart_summary_close">Close</a></div>' +
 			'<div class="cart_actions_center"><a href="{{cart_view_url}}" class="js_close_summary_details">View Cart</a></div>' +
-			'<div class="cart_actions_right"><input type="button" value="Checkout" class="js_cart_checkout"></div>' +
+			'<div class="cart_actions_right"><button class="js_cart_checkout">Checkout</button></div>' +
 		'</div>' +
 		'</div>'),
 
