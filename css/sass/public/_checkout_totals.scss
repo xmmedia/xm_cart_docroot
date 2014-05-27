@@ -1,6 +1,8 @@
 .cart_checkout_totals {
+	margin-top: 2.5em;
 	.col_name { width: 30%; }
+	.grand_total { font-size: 1.3em; }
 	@include respond_to_min(wide_handhelds) {
-		.col_name { width: auto; }
+		.col_name { width: 60%; }
 	}
 }
