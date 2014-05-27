@@ -1,5 +1,6 @@
 .cart_actions {
-	margin: 1em $side_pad; @extend %clearfix;
+	@extend %clearfix;
+	margin: 1em $side_pad;
 	a { display: inline-block; margin-top: 0.4em; }
 	.cart_actions_left {
 		float: left;
