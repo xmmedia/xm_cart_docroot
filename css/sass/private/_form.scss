@@ -1,0 +1,16 @@
+.cart_form {
+	margin-bottom: 1em;
+	.field {
+		margin-bottom: 0.8em;
+		label:first-of-type { display: block; padding-left: 0.15em; }
+		&.checkbox label { display: inline-block; margin-right: 1.3em; }
+	}
+	input[type="radio"], input[type="checkbox"] { margin-right: 0.5em; }
+	.buttons input { margin-right: 1em; }
+	.help { color: #777; margin-bottom: 0.5em; }
+	.col_container {
+		@extend %clearfix;
+		.col { float: left; width: 47%; margin-right: 2em; }
+	}
+	.list { margin: 0; padding: 0; list-style: none; }
+}
