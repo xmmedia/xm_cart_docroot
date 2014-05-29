@@ -1,9 +1,15 @@
 .cart_checkout_box {
-	border-bottom: 1px solid #c1c1c1; padding: 0 0 1em 0; margin-bottom: 1em; @extend %clearfix;
+	@extend %clearfix;
+	border-bottom: 1px solid #c1c1c1;
+	padding: 0 0 1em 0;
+	margin-bottom: 1em;
+
 	h2 { margin: 0; }
 	h3 { margin: 1.3em 0 0.3em 0; }
+
 	.cart_checkout_box_actions {
-		margin: 1em $side_pad; @extend %clearfix;
+		@extend %clearfix;
+		margin: 1em $side_pad;
 		.cart_checkout_box_actions_left {
 			float: left;
 			a { margin-right: 1em; }
@@ -29,6 +35,9 @@
 		.cart_checkout_box_billing_right { float: right; width: 50%; }
 	}
 	.copy_shipping { margin: 0.8em 0 0.3em; }
+
+	// last box on the page, no border
+	&.cart_checkout_box_confirm { border-bottom: none; }
 
 	.order_textarea { width: 100%; }
 

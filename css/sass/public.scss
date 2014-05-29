@@ -6,7 +6,7 @@ $side_pad: 0.4em;
 	/* mainly for mobile devices because it will cause the selects to be wider than the content/containers/grid */
 	select { max-width: 22.5em; }
 	.hidden { display: none; }
-	@import "public/_product_list", "public/_actions", "public/_location_select", "public/_checkout_box", "public/_checkout_totals", "public/_field";
+	@import "public/_product_list", "public/_actions", "public/_location_select", "public/_checkout_box", "public/_checkout_totals", "public/_field", "public/_login", "public/_completed";
 }
 
 .cart_empty_msg, .cart_error_msg { font-style: italic; }
