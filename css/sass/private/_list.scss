@@ -1,0 +1,38 @@
+.list {
+	@extend %no_list;
+
+	li {
+		@extend %clearfix;
+		padding: 0.5em;
+		color: #9f9f9f;
+		border-bottom: 1px solid #dfdfdf;
+
+		&.headers { font-weight: bold; color: lighten(#9f9f9f, 10%); }
+
+		.actions {
+			float: right;
+			a { margin-left: 1em; }
+		}
+
+		a { color: lighten(#489dcf, 30%); text-decoration: none; }
+		&:hover:not(.headers) {
+			background: #eee;
+			color: darken(#9f9f9f, 35%);
+			&.headers { background: auto; }
+			a {
+				color: #489dcf; text-decoration: underline;
+				&:hover, &:focus { color: #146493; }
+			}
+		}
+	}
+
+	&.list_orders {
+		li {
+			> div:not(.actions) { float: left; margin-right: 0.5em; }
+			.order_num { width: 10%; }
+			.status { width: 17%; }
+			.name { width: 56%; }
+			.total { width: 10%; text-align: right; }
+		}
+	}
+}
