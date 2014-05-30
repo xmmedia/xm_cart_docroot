@@ -6,7 +6,7 @@
 		&:first-of-type { margin-top: 0; }
 	}
 
-	@import "private/_form", "private/_list";
+	@import "private/_form", "private/_list", "private/_order_view";
 }
 
 .cart_rate_list {

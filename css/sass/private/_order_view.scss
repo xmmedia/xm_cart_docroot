@@ -1,0 +1,25 @@
+.cart_order_actions {
+	margin-top: 1em;
+	text-align: right;
+	a { margin-left: 1em; }
+}
+
+.cart_order_action_container {
+	float: right;
+	width: 25em;
+	margin-top: 0.5em;
+	padding: 0.5em;
+	border: 1px solid #c1c1c1;
+
+	.field { margin-bottom: 0.3em; }
+	.numeric { text-align: right; }
+	.buttons {
+		button, a { margin-right: 1em; }
+	}
+
+	.refund_amount_container {
+		display: none;
+		margin-left: 0.5em;
+		&.show { display: inline-block; }
+	}
+}

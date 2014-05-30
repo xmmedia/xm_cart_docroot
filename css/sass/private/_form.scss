@@ -6,7 +6,7 @@
 		&.checkbox label { display: inline-block; margin-right: 1.3em; }
 	}
 	input[type="radio"], input[type="checkbox"] { margin-right: 0.5em; }
-	.buttons input { margin-right: 1em; }
+	.buttons input, .buttons button { margin-right: 1em; }
 	.help { color: #777; margin-bottom: 0.5em; }
 	.col_container {
 		@extend %clearfix;
