@@ -62,7 +62,7 @@ $(function() {
 				}
 			});
 
-			rc.find('.js_cancel').on('click', function(e) {
+			rc.find('.js_close').on('click', function(e) {
 				e.preventDefault();
 				rc.remove();
 			});
@@ -87,7 +87,7 @@ $(function() {
 
 			$('.js_cart_order_actions').after(cc);
 
-			cc.find('.js_no').on('click', function(e) {
+			cc.find('.js_close').on('click', function(e) {
 				e.preventDefault();
 				cc.remove();
 			});
@@ -101,11 +101,15 @@ var cart_order = {
 			+ '<div class="field"><input type="radio" name="refund_type" value="full" id="refund_type_full" checked autofocus><label for="refund_type_full">Refund the Entire Order ({{order.final_total_formatted}})</label></div>'
 			+ '<div class="field"><input type="radio" name="refund_type" value="partial" id="refund_type_partial"><label for="refund_type_partial">Refund a Portion of the Total</label>'
 				+ '<div class="refund_amount_container js_refund_amount_container"><input type="text" name="refund_amount" value="{{order.final_total}}" size="11" maxlength="11" class="numeric js_refund_amount"></div></div>'
-			+ '<div class="buttons"><button>Process Refund</button><a href="" class="js_cancel">Cancel</a></div>'
+			+ '<div class="field"><input type="checkbox" name="send_email" value="1" checked id="send_email"><label for="send_email">Send Updated Order to Customer</label></div>'
+			+ '<div class="buttons"><button>Process Refund</button><a href="" class="js_close">Close</a></div>'
 		+ '</form>'
 		+ '</div>'),
 	cancel_template : Handlebars.compile('<div class="cart_order_action_container js_cart_order_action_container" data-action="cancel">'
 		+ '<div>Are you sure you want to cancel and refund the balance ({{order.final_total_formatted}}) this order?</div>'
-		+ '<div class="buttons"><form action="/cart/admin/order/refund/{{order.id}}" method="post" accept-charset="utf-8"><input type="hidden" name="cancel_order" value="1"><button>Yes, Cancel &amp; Refund the Order</button></form><a href="" class="js_no">No, don\'t cancel</a></div>'
+		+ '<form action="/cart/admin/order/refund/{{order.id}}" method="post" accept-charset="utf-8">'
+			+ '<div class="field"><input type="checkbox" name="send_email" value="1" checked id="send_email"><label for="send_email">Send Updated Order to Customer</label></div>'
+			+ '<div class="buttons"><input type="hidden" name="cancel_order" value="1"><button autofocus>Yes, Cancel &amp; Refund the Order</button><a href="" class="js_close">Close</a></div>'
+		+ '</form>'
 		+ '</div>')
 };
