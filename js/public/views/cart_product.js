@@ -1,7 +1,7 @@
 cart_public_app.views.cart_product = Backbone.View.extend({
 	tagName : 'tr',
 	template : Handlebars.compile(
-		'<td class="col_name">{{name}}{{#if description}}<div class="product_description">{{description}}</div>{{/if}}</td>' +
+		'<td class="col_name">{{#if show_product_photo}}<div class="photo"><img src="{{photo_uri}}"></div>{{/if}}{{name}}{{#if description}}<div class="product_description">{{description}}</div>{{/if}}</td>' +
 		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="cart_order_product_quantity js_cart_order_product_quantity"><br><a href="" class="cart_order_product_update_quantity js_cart_order_product_update_quantity">Update</a></td>' +
 		'<td class="col_unit_price">{{unit_price_formatted}}</td>' +
 		'<td class="col_amount">{{amount_formatted}}</td>' +
@@ -28,6 +28,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 	render : function() {
 		var template_vars = _.clone(this.model.attributes);
 		template_vars.cart_route_prefix = cart_config.route_prefix;
+		template_vars.show_product_photo = cart_config.show_product_photo;
 
 		if (this.options.donation_cart) {
 			this.$el.html(this.donation_template(template_vars));
