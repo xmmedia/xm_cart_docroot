@@ -14,6 +14,7 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	events : {
 		'click .js_cart_checkout_continue' : 'next_step',
 		'click .js_cart_checkout_box_edit' : 'edit_step',
+		'click .js_cart_product_list' : 'view_product',
 		'click .js_cart_checkout_copy_shipping' : 'copy_shipping',
 		'change .js_cart_checkout_form_billing' : 'billing_changed',
 		'keyup .js_cart_checkout_credit_card_number' : 'display_card_type',
@@ -482,6 +483,10 @@ cart_public_app.views.checkout = Backbone.View.extend({
 		}
 
 		this.add_messages(step_container, message_html);
+	},
+
+	view_product : function(e) {
+		window.location = $(e.target).closest('.js_col_name').data('view-url');
 	},
 
 	add_shipping_test_values : function(e) {
