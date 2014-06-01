@@ -1,7 +1,11 @@
 cart_public_app.views.cart_product = Backbone.View.extend({
 	tagName : 'tr',
 	template : Handlebars.compile(
-		'<td class="col_name">{{#if show_product_photo}}<div class="photo"><img src="{{photo_uri}}"></div>{{/if}}{{name}}{{#if description}}<div class="product_description">{{description}}</div>{{/if}}</td>' +
+		'<td class="col_name js_col_name" data-view-url="{{view_url}}">' +
+			'{{#if show_product_photo}}<div class="photo"><img src="{{photo_uri}}"></div>{{/if}}' +
+			'<span class="name">{{name}}</span>' +
+			'{{#if description}}<div class="product_description">{{description}}</div>{{/if}}' +
+		'</td>' +
 		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="cart_order_product_quantity js_cart_order_product_quantity"><br><a href="" class="cart_order_product_update_quantity js_cart_order_product_update_quantity">Update</a></td>' +
 		'<td class="col_unit_price">{{unit_price_formatted}}</td>' +
 		'<td class="col_amount">{{amount_formatted}}</td>' +
@@ -16,7 +20,8 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 	events : {
 		'change .js_cart_order_product_quantity' : 'quantity_changed',
 		'click .cart_order_product_update_quantity' : 'update_quantity',
-		'click .js_cart_order_product_remove' : 'remove_product'
+		'click .js_cart_order_product_remove' : 'remove_product',
+		'click .js_col_name' : 'view_product'
 	},
 
 	initialize : function(options) {
@@ -66,5 +71,9 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 			cart_order_product_id : this.model.get('id'),
 			quantity : this.model.get('quantity')
 		});
+	},
+
+	view_product : function() {
+		window.location = this.$el.find('.js_col_name').data('view-url');
 	}
 });

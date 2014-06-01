@@ -5,7 +5,11 @@
 	th { text-align: left; }
 	.col_name {
 		width: 60%;
-		.photo { float: left; margin: 0 0.5em 0.5em 0; }
+		.photo {
+			float: left; margin: 0 0.5em 0.5em 0;
+			&:hover { cursor: pointer; }
+		}
+		.name:hover { color: #0b72b5; cursor: pointer; }
 		.product_description { font-size: 0.8em; color: #4d4d4d; }
 	}
 	.col_quantity { text-align: center; }

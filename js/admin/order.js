@@ -4,6 +4,11 @@ $(function() {
 		this.submit();
 	});
 
+	// click product name or td will take you to the public product page
+	$('.js_cart_product_list').on('click', '.js_col_name', function() {
+		window.location = $(this).data('view-url');
+	});
+
 	$('.js_cart_order_refund').on('click', function(e) {
 		e.preventDefault();
 
