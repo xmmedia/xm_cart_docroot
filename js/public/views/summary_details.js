@@ -127,6 +127,8 @@ cart_public_app.views.summary_details = Backbone.View.extend({
 
 	close_summary_details : function(e) {
 		e.preventDefault();
+		// if we don't prevent propagation then it will be detected as clicking on the summary link again
+		e.stopPropagation();
 		cart_public_app.summary.close_summary_details();
 	}
 });
