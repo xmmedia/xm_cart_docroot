@@ -5,6 +5,7 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 			'{{#if show_product_photo}}<div class="photo"><img src="{{photo_uri}}"></div>{{/if}}' +
 			'<span class="name">{{name}}</span>' +
 			'{{#if description}}<div class="product_description">{{description}}</div>{{/if}}' +
+			'{{#if show_inventory}}<div class="inventory_available {{#if limited_quantity}}limited_quantity{{else}}in_stock{{/if}}">Available: {{inventory_available}}</div>{{/if}}' +
 		'</td>' +
 		'<td class="col_quantity"><input type="text" size="3" maxlength="6" value="{{quantity}}" class="cart_order_product_quantity js_cart_order_product_quantity"><br><a href="" class="cart_order_product_update_quantity js_cart_order_product_update_quantity">Update</a></td>' +
 		'<td class="col_unit_price">{{unit_price_formatted}}</td>' +
@@ -34,6 +35,8 @@ cart_public_app.views.cart_product = Backbone.View.extend({
 		var template_vars = _.clone(this.model.attributes);
 		template_vars.cart_route_prefix = cart_config.route_prefix;
 		template_vars.show_product_photo = cart_config.show_product_photo;
+		template_vars.show_inventory = cart_config.show_inventory;
+		template_vars.limited_quantity = (this.model.get('quantity') > this.model.get('inventory_available'));
 
 		if (this.options.donation_cart) {
 			this.$el.html(this.donation_template(template_vars));
