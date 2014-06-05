@@ -32,7 +32,7 @@
 			> div:not(.actions) { float: left; min-height: 1em; margin-right: 0.5em; }
 			.order_num { width: 10%; }
 			.status { width: 17%; }
-			.name { width: 56%; }
+			.name { width: 55%; }
 			.total { width: 10%; text-align: right; }
 		}
 		li:not(.headers) .order_num { color: darken($color_grey, 35%); }
