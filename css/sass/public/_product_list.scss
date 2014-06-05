@@ -10,7 +10,11 @@
 			&:hover { cursor: pointer; }
 		}
 		.name:hover { color: #0b72b5; cursor: pointer; }
-		.product_description { font-size: 0.8em; color: #4d4d4d; }
+		.product_description, .inventory_available { font-size: 0.85em; color: #4d4d4d; }
+		.inventory_available {
+			&.in_stock { color: #008b10; }
+			&.limited_quantity { color: #b50404; }
+		}
 	}
 	.col_quantity { text-align: center; }
 	.col_unit_price, .col_amount { text-align: right; }
