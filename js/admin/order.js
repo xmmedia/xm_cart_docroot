@@ -4,6 +4,19 @@ $(function() {
 		this.submit();
 	});
 
+	// order status change form
+	$('.js_order_status_change_form').on('change', function() {
+		var status_select = $(this).find('.js_order_status_change'),
+			status = parseInt(status_select.val(), 10);
+		if (status) {
+			if (status > cart_order_view_data.order.status || confirm('The status you\'ve picked will move the order back in the standard process. Are you sure you want to continue?')) {
+				$(this).submit();
+			} else {
+				status_select.val('');
+			}
+		}
+	});
+
 	// click product name or td will take you to the public product page
 	$('.js_cart_product_list').on('click', '.js_col_name', function() {
 		window.location = $(this).data('view-url');
