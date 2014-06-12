@@ -32,6 +32,17 @@ cart_public_app.views.checkout = Backbone.View.extend({
 	processing : false,
 
 	initialize : function() {
+		// check to Stripe since we can't checkout without the Stripe library
+		try {
+			if ( ! Stripe) {
+				throw new Exception('No Stripe');
+			}
+		} catch (e) {
+			alert('There was a problem loading the checkout page. Please try beginning the checkout process again.');
+			window.location = cart_config.cart_view_url;
+			return;
+		}
+
 		this.total_rows = cart_preload.total_rows;
 
 		this.steps = this.$('.js_cart_checkout_step');

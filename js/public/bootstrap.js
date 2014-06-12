@@ -89,4 +89,7 @@ var cart_public_app = {
 		'</table>'
 };
 
-Stripe.setPublishableKey(cart_config.stripe_publishable_key);
+// allow the user to use the site without having Stripe available
+try {
+	Stripe.setPublishableKey(cart_config.stripe_publishable_key);
+} catch (e) {}
