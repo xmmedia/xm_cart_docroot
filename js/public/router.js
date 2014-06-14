@@ -1,6 +1,7 @@
 cart_public_app.router = new (Backbone.Router.extend({
 	routes: {
 		'checkout' : 'checkout',
+		'view_order' : 'view_order',
 		// should work on any path on an entire website
 		'*path' : 'general'
 	},
@@ -47,6 +48,10 @@ cart_public_app.router = new (Backbone.Router.extend({
 		_.each($('.js_cart_add_product'), function(el) {
 			new cart_public_app.views.add_product({ el : el });
 		});
+	},
+
+	view_order : function() {
+		new cart_public_app.views.order();
 	},
 
 	load_summary : function() {
