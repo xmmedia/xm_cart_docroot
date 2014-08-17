@@ -1,6 +1,9 @@
 @import  "_vars", "_media", "_clearfix";
 
+@import "_glyphicons_filetypes";
+
 .cart_admin {
+	> .grid { padding-right: 0; padding-left: 0; }
 	.grid:first-of-type { padding: 0; }
 	h1, h2 {
 		&:first-of-type { margin-top: 0; }
