@@ -1,8 +1,17 @@
 $(function() {
-	// changing the order filter will submit the form
-	$('.js_cart_order_filter_form').on('change', function() {
-		this.submit();
-	});
+	// order export: change filter shows or updates the time frame fields
+	$('.js_cart_order_filter_form').on('change', '.js_cart_order_time_frame', function() {
+		var val = $(this).val(),
+			date_parts = val.split('-'),
+			time_frame_custom_container = $('.js_cart_order_filter_form .js_cart_order_time_frame_custom');
+		if (val == 'custom') {
+			time_frame_custom_container.show();
+		} else {
+			time_frame_custom_container.hide();
+			$('.js_cart_order_time_frame_start').datepicker('setDate', $.datepicker.parseDate('yymmdd', date_parts[0]));
+			$('.js_cart_order_time_frame_end').datepicker('setDate', $.datepicker.parseDate('yymmdd', date_parts[1]));
+		}
+	}).find('.js_cart_order_time_frame').trigger('change');
 
 	// order status change form
 	$('.js_order_status_change_form').on('change', function() {
@@ -111,20 +120,6 @@ $(function() {
 			});
 		}
 	});
-
-	// order export: change filter shows or updates the time frame fields
-	$('.js_cart_order_export_filter_form').on('change', '.js_cart_order_time_frame', function() {
-		var val = $(this).val(),
-			date_parts = val.split('-'),
-			time_frame_custom_container = $('.js_cart_order_export_filter_form .js_cart_order_time_frame_custom');
-		if (val == 'custom') {
-			time_frame_custom_container.show();
-		} else {
-			time_frame_custom_container.hide();
-			$('.js_cart_order_time_frame_start').datepicker('setDate', $.datepicker.parseDate('yymmdd', date_parts[0]));
-			$('.js_cart_order_time_frame_end').datepicker('setDate', $.datepicker.parseDate('yymmdd', date_parts[1]));
-		}
-	}).find('.js_cart_order_time_frame').trigger('change');
 });
 
 var cart_order = {
