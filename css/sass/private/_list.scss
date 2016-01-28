@@ -1,3 +1,10 @@
+.list_actions {
+	float: right;
+	margin: 0 0.4em 1em 0.4em;
+    text-align: right;
+    font-size: 1.2em;
+}
+
 .list {
 	@extend %no_list;
 	$color_grey: #6a6a6a;
